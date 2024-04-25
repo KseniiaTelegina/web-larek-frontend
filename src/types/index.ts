@@ -3,10 +3,13 @@ export interface IProduct {
     title: string;
     price: number;
     image: string;
-    description?: string;
     category: string;
+    description?: string;
 }
 
+export interface ICardActions {
+    onClick: (event: MouseEvent) => void;
+}
 
 export interface IProductItem {
     description: string;
@@ -24,14 +27,27 @@ export interface IAppState {
     // loading: boolean;
 }
 
-export enum PaymentMethod {
-    Cash = "Наличный",
-    NonCash = "Безналичный"
+export interface IBasketHeaderButton {
+    id: string;
+    title: string;
+    price: number;
+    image: string;
 }
+
+// export interface IBasketModal {
+//     openModal(): void;
+//     closeModal(): void;
+//     bindOpenButton(buttonSelector: string): void;
+// }
+
+// export enum PaymentMethod {
+//     Cash = "Наличный",
+//     NonCash = "Безналичный"
+// }
 
 export interface IOrderForm {
     address: string;
-    paymentMethod: PaymentMethod;
+    // paymentMethod: PaymentMethod;
 }
 
 export interface IUserForm {
@@ -57,17 +73,21 @@ export interface CatalogModel {
 //     new (container: HTMLElement, events?: IEventEmitter): IViewConstructor;
 // }
 
-// export interface IBasketModel {
-//     items: Map<string, IBasketItem>;
-//     add(id: string): void;
-//     remove(id: string): void;
-// }
+export interface AppCard {
+    cardInBasket: IProduct[];
+}
 
-// export interface IEventEmitter {
-//     emit: (event: string, data: unknown) => void;
-// }
+export interface IBasketModel {
+    id: string;
+    title: string;
+    price: number;
+    items: Map<string, number>;
+    add(id: string): void;
+    remove(id: string): void;
+}
 
-// export type IBasketItem = Pick<Product, 'id' | 'title' | 'price' | 'image'> & {
+
+// export type IBasketItem = Pick<IProduct, 'id' | 'title' | 'price' | 'image'> & {
 //     productNumber: number;
 // };
 
@@ -159,9 +179,13 @@ export interface IModalData {
 //         };
 //     }
 // }
+export interface IEventEmitter {
+    emit: (event: string, data: unknown) => void;
+}
 
-
-
+export interface IViewConstructor {
+    new (container: HTMLElement, events?: IEventEmitter): IView;
+}
 
 export interface IView {
     render(data?: object): HTMLElement;

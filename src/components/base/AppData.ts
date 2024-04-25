@@ -1,7 +1,7 @@
 // import {dayjs, formatNumber} from "../utils/utils";
 
 import {Model} from "./Model"
-import {FormErrors, ICard, IProduct, IAppState, IOrder, PaymentMethod} from "../../types/index";
+import {FormErrors, IProduct, IAppState, IOrder, IBasketModel} from "../../types/index";
 
 export type CatalogChangeEvent = {
     catalog: IProduct[]
@@ -13,7 +13,7 @@ export class AppState extends Model<IAppState> {
     catalog: IProduct[];
     order: IOrder = {
         address: '',
-        paymentMethod: PaymentMethod.Cash,
+        // paymentMethod: PaymentMethod.Cash,
         items: []
     };
     preview: string | null;
@@ -24,15 +24,19 @@ export class AppState extends Model<IAppState> {
         this.emitChanges('items:changed', { catalog: this.catalog });
     }
 
-    // setCatalog(items: IProduct[]) {
-    //     this.catalog = items.map(item => new IProduct(item, this.events));
-    //     this.emitChanges('items:changed', { catalog: this.catalog });
-    // }
+    get catalogCards() {
+        return this.catalog;
+    }
 
-    // setCatalog(items: IProduct[]) {
-    //     this.catalog = items.map(item => new IProduct({...item}, this.events));
-    //     this.emitChanges('items:changed', { catalog: this.catalog });
-    // }
+    setPreview(item: IProduct) {
+        this.preview = item.id;
+        this.emitChanges('preview:changed', item);
+    }
+
+    setButton(item: IBasketModel) {
+        this.preview = item.id;
+        this.emitChanges('preview:changed', item);
+    }
 }
 
 // export class AppState extends Model<IAppState> {
