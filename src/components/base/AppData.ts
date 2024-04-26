@@ -2,7 +2,7 @@
 
 import {Model} from "./Model"
 import {FormErrors, IProduct, IAppState, IOrder, IBasketModel} from "../../types/index";
-import { appCard } from "../.."; 
+// import { appCard } from "../.."; 
 
 export type CatalogChangeEvent = {
     catalog: IProduct[]
@@ -44,6 +44,8 @@ export class AppState extends Model<IAppState> {
         this.preview = item.id;
         this.emitChanges('basket:items-changed', item);
       }
+
+    
 
     // updateBasket(item: IBasketModel) {
     //     // Предположим, что itemRenderer функция преобразует IProduct в HTMLElement

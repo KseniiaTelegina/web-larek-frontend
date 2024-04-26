@@ -32,6 +32,7 @@ export class Basket extends Component<IBasketView> {
                 events.emit('order:open');
             });
         }
+
   
         this.items = [];
 

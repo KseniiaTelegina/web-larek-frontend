@@ -11,15 +11,16 @@ import { ProductAPI } from './components/base/ProductAPI';
 import { AppState, CatalogChangeEvent } from './components/base/AppData';
 import { Card, CardItem } from './components/base/Card';
 import { cloneTemplate } from '../src/utils/utils';
-import { IProduct, AppCard } from './types';
+import { IProduct } from './types';
 import { Basket } from './components/Basket';
 import { Order } from './components/Order';
+import { appCard } from './components/base/Card';
 // import { a} from './components/base/Card';
 // import { createElement } from '../src/utils/utils';
 
-export const appCard: AppCard = {
-    cardInBasket: []
-};
+// export const appCard: AppCard = {
+//     cardInBasket: []
+// };
 
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
@@ -90,88 +91,95 @@ events.on('basket:open', () => {
     modal.render({ content: basket.render() });
   });
 
-//   events.on('basket:open', () => {
-//     // Сначала рендерим содержимое корзины
-//     const basketContent = basket.render();
-    
-//     // Предполагаем, что card.render() возвращает HTML элемент или строку с HTML
-//     const cardListContent = cardList.render();
-
-//     // Создаём новый элемент div чтобы объединить basketContent и cardContent
-//     const combinedContent = document.createElement('div');
-//     combinedContent.appendChild(basketContent);
-//     combinedContent.appendChild(cardListContent);
-
-//     // Отображаем combinedContent в модальном окне
-//     modal.render({ content: combinedContent });
-// });
-
-// events.on('basket:add', (item: IProduct) => {
-//     appCard.cardInBasket.push(item);
-//     events.emit('basket:changed');
-    
-// });
-
-// events.on('basket:add', (item: IProduct) => {
-    
-//     const showItemBasket = (item: IProduct) => {
-//     const cardBasket = new CardItem(cloneTemplate(cardBasketTemplate), events, item);
-//     modal.render({
-//         content: cardBasket.render({
-//             title: item.title,
-//             price: item.price
-//         })
-//     });
-// };
-
-// if (item) {
-//     api.getOpenBasket(item.id)
-//         .then((result) => {
-//             item.title = result.title;
-//             item.price = result.price;
-//             showItemBasket(item);
-//         })
-//         .catch((err) => {
-//             console.error(err);
-//         })
-// } else {
-//     modal.close();
-// }
-// });
-
 
 events.on('basket:add', (item: IProduct) => {
-    // Добавление товара в 'cardInBasket'
-    appCard.cardInBasket.push(item);
-    // events.emit('basket:changed');
-    
-    // Функция для отображения товара в корзине через модальное окно
-    const showItemBasket = (item: IProduct) => {
-        const cardBasket = new Basket(cloneTemplate(cardBasketTemplate), events);
-        modal.render({
-            content: cardBasket.render({
-                title: item.title,
-                price: item.price
-            })
-        });
-    };
-
-    // Проверка на наличие объекта товара, и дальнейшая загрузка данных с сервера
-    if (item) {
-        api.getOpenBasket(item.id)
-            .then((result) => {
-                // Обновление данных товара
-                item.title = result.title;
-                item.price = result.price;
-                showItemBasket(item); // Отображение товара в корзине
-            })
-            .catch((err) => {
-                console.error(err); // Обработка возможных ошибок
-            });
-    } else {
-        modal.close(); // Закрытие модального окна, если товар отсутствует
-    }
+    appCard.addToCart(item);
+    console.log('Item has been added to the shopping cart:', item);
 });
+
+
+  
+//   events.on('basket:add', (item: IProduct) => {
+//     // Добавление товара в список корзины
+//     appCard.cardInBasket.push(item);
+    
+//     // Функция загрузки информации о товаре и отображения его в модальном окне корзины
+//     const fetchAndShowItemInBasket = async () => {
+//         try {
+//             // Загрузка дополнительной информации о товаре
+//             const result = await api.getOpenBasket(item.id);
+            
+//             // Обновление информации о товаре
+//             const updatedItem = {
+//                 ...item,
+//                 title: result.title,
+//                 price: result.price
+//             };
+
+//             // Создание экземпляра корзины и отображение товара в модальном окне
+//             const cardBasket = new Basket(cloneTemplate(cardBasketTemplate), events);
+//             modal.render({
+//                 content: cardBasket.render({
+//                     title: updatedItem.title,
+//                     price: updatedItem.price
+//                 })
+//             });
+
+//             // Возможно, при желании, можно также эмитировать событие изменения корзины
+//             events.emit('basket:changed');
+
+//         } catch(err) {
+//             console.error('Ошибка при загрузке данных товара:', err);
+//             modal.close(); // Закрыть модальное окно в случае ошибки
+//         }
+//     };
+
+//     // Вызов функции загрузки и отображения
+//     if (item) {
+//         fetchAndShowItemInBasket();
+//     } else {
+//         modal.close(); // Закрыть модальное окно, если товар отсутствует
+//     }
+// });
+
+
+
+
+
+
+
+// events.on('basket:add', (item: IProduct) => {
+//     // Добавление товара в 'cardInBasket'
+//     appCard.cardInBasket.push(item);
+//     // events.emit('basket:changed');
+    
+//     // Функция для отображения товара в корзине через модальное окно
+//     const showItemBasket = (item: IProduct) => {
+//         const cardBasket = new Basket(cloneTemplate(cardBasketTemplate), events);
+//         modal.render({
+//             content: cardBasket.render({
+//                 title: item.title,
+//                 price: item.price
+//             })
+//         });
+//     };
+
+//     // Проверка на наличие объекта товара, и дальнейшая загрузка данных с сервера
+//     if (item) {
+//         api.getOpenBasket(item.id)
+//             .then((result) => {
+//                 // Обновление данных товара
+//                 item.title = result.title;
+//                 item.price = result.price;
+//                 showItemBasket(item); // Отображение товара в корзине
+//             })
+//             .catch((err) => {
+//                 console.error(err); // Обработка возможных ошибок
+//             });
+//     } else {
+//         modal.close(); // Закрытие модального окна, если товар отсутствует
+//     }
+// });
 
 
 // Добавление товара в корзину и открытие модального окна корзины

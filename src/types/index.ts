@@ -73,9 +73,9 @@ export interface CatalogModel {
 //     new (container: HTMLElement, events?: IEventEmitter): IViewConstructor;
 // }
 
-export interface AppCard {
-    cardInBasket: IProduct[];
-}
+// export interface AppCard {
+//     cardInBasket: IProduct[];
+// }
 
 export interface IBasketModel {
     id: string;

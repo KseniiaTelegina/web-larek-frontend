@@ -1,14 +1,26 @@
 import { Component } from "./Component";
 import { bem, ensureElement } from "../../utils/utils";
 import { IEvents } from "./events";
-import { IProduct, AppCard} from "../../types";
+import { IProduct} from "../../types";
 import { EventEmitter } from "./events";
 
+// const CATEGORY_COLORS = <Record<string, string>>{
+//     'дополнительное': 'additional',
+//     'софт-скил': 'soft',
+//     'кнопка': 'button',
+//     'хард-скил': 'hard',
+//     'другое': 'other',
+//   }
 
+export const appCard = {
+    productArray: [] as IProduct[],
+    cart: [] as IProduct[],
 
-export const appCard: AppCard = {
-    cardInBasket: []
-};
+    addToCart(product: IProduct) {
+        this.cart.push(product);
+        // console.log('Товар добавлен в корзину:', product);
+    },
+}
 
 interface ICardActions {
     onClick: (event: MouseEvent) => void;
@@ -26,10 +38,14 @@ export class Card<T> extends Component<IProduct> {
 
         this._title = container.querySelector('.card__title');
         this._category = container.querySelector('.card__category');
+        
         this._image = container.querySelector('.card__image');
         this._price = container.querySelector('.card__price');
         this._button = container as HTMLButtonElement;
-        // this._category.classList.add(`.card__category_${data.categoryType}`);
+
+
+        // this._category.classList.add(`card__category_${CATEGORY_COLORS[value]}`);
+
 
         if (actions?.onClick) {
             this._button.addEventListener('click', event => {
@@ -37,6 +53,7 @@ export class Card<T> extends Component<IProduct> {
                 console.log('Clicked on card');
             });
         }
+        
     }
 
 
@@ -91,7 +108,14 @@ export class CardItem extends Card<HTMLElement> {
         this._description = container.querySelector('.card__text');
         this._button = container.querySelector('.button')
 
-        //         if (actions?.onClick) {
+        if (this._button) {
+            this._button.addEventListener('click', () => {
+                this.events.emit('basket:add', item);
+                // console.log('Clicked on card and added to basket', item);
+            });
+        }
+
+                //         if (actions?.onClick) {
         //     this._button.addEventListener('click', event => {
         //         actions.onClick( event);
         //         console.log('Clicked on card');
@@ -104,13 +128,7 @@ export class CardItem extends Card<HTMLElement> {
         //         console.log('Clicked on card');
         //     });
         // }
-
-        if (this._button) {
-            this._button.addEventListener('click', () => {
-                this.events.emit('basket:add', item);
-                console.log('Clicked on card and added to basket', item);
-            });
-        }
+        
 
         // this._button.addEventListener('click', () => {
         //     this.events.emit('basket:add', item); // Событие для добавления в корзину
@@ -128,8 +146,6 @@ export class CardItem extends Card<HTMLElement> {
     get description(): string {
         return this._description.textContent || '';
     }
-
-    
 }
 
 // export interface ICard {
