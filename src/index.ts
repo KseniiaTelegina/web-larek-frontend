@@ -9,9 +9,9 @@ import {ensureElement} from "../src/utils/utils";
 import { Page } from './components/base/Page';
 import { ProductAPI } from './components/base/ProductAPI';
 import { AppState, CatalogChangeEvent } from './components/base/AppData';
-import { Card, CardItem } from './components/base/Card';
+import { Card, CardPreview } from './components/base/Card';
 import { cloneTemplate } from '../src/utils/utils';
-import { IProduct } from './types';
+import { IProduct, ICard } from './types';
 import { Basket } from './components/Basket';
 import { Order } from './components/Order';
 import { appCard } from './components/base/Card';
@@ -28,6 +28,7 @@ const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
 const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
+
 
 
 const events = new EventEmitter();
@@ -49,7 +50,30 @@ const order = new Order(cloneTemplate(orderTemplate), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 // const cardList = new CardItem(cloneTemplate(cardBasketTemplate), events);
 
+// const cardItemBasket = new CardItem(cloneTemplate(cardBasketTemplate), ), {
+//     onClick: () => events.emit('basket:add', item)
+// }
 
+
+
+
+
+// events.on('basket:add', (item: IProduct) => {
+//     console.log('Item has been added to the shopping cart:', item);
+//     appCard.setCardItemBasket(item);
+//     const cardBasket = new Card(cloneTemplate(cardBasketTemplate), {
+//         onClick: () => events.emit('basket:add', item)
+//     });
+//     return cardBasket.render({
+//         title: item.title,
+//         price: item.price,
+//     })
+// })
+
+
+events.on('card:select', (item: IProduct) => {
+    appCard.setCardItemBasket(item)
+  });
 
 
 const appData = new AppState({}, events);
@@ -58,6 +82,7 @@ api.getCardList()
     .then(appData.setCatalog.bind(appData))
     .catch(err => {
         console.error(err);
+
     });
 
 //отображение списка продуктов
@@ -92,10 +117,60 @@ events.on('basket:open', () => {
   });
 
 
-events.on('basket:add', (item: IProduct) => {
-    appCard.addToCart(item);
-    console.log('Item has been added to the shopping cart:', item);
+// корзина
+events.on('basket:change', () => {
+    basket.items = Array.from(appData.basketModel.items).map((basketItem) => {
+        const item = Array.from(appData.basketModel.items).find((catalogItem) => catalogItem.id === basketItem.id);
+        const card = new Card(cloneTemplate(cardBasketTemplate), {
+      onClick: () => events.emit('basket:change', item)
+    });
+    return card.render(item);
+  });
 });
+//
+
+
+events.on('add-basket:change', (item: IProduct) => {
+    const card = new Card(cloneTemplate(cardPreviewTemplate), {
+        onClick: () => {
+            if (appData.cardInBasket(item)) {
+                appData.removeFromBasket(item);
+                card.button = 'В корзину';
+            } else {
+                appData.addToBasket(item);
+                card.button = 'Удалить из корзины';
+            }
+            
+        },
+     });
+    modal.render({ content: card.render(item) });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// events.on('basket:add', (item: IProduct) => {
+//     appCard.addToCart(item);
+//     console.log('Item has been added to the shopping cart:', item);
+// });
 
 
   
@@ -229,7 +304,7 @@ events.on('order:open', () => {
 // // Продукт открыт
 events.on('preview:changed', (item: IProduct) => {
     const showItem = (item: IProduct) => {
-        const card = new CardItem(cloneTemplate(cardPreviewTemplate), events, item);
+        const card = new CardPreview(cloneTemplate(cardPreviewTemplate));
 
         modal.render({
             content: card.render({

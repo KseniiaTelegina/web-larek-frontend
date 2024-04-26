@@ -1,11 +1,24 @@
 export interface IProduct {
+    selected: boolean;
     id: string;
     title: string;
-    price: number;
     image: string;
     category: string;
     description?: string;
+    price: number | null;   
 }
+
+export interface IBasketModel {
+    // id: string;
+    // title: string;
+    // price: number;
+    // push(id: string): void;
+    // items: Map<string, number>;
+    items: IProduct[]
+    add(id: string): void;
+    remove(id: string): void;
+}
+
 
 export interface ICardActions {
     onClick: (event: MouseEvent) => void;
@@ -77,14 +90,6 @@ export interface CatalogModel {
 //     cardInBasket: IProduct[];
 // }
 
-export interface IBasketModel {
-    id: string;
-    title: string;
-    price: number;
-    items: Map<string, number>;
-    add(id: string): void;
-    remove(id: string): void;
-}
 
 
 // export type IBasketItem = Pick<IProduct, 'id' | 'title' | 'price' | 'image'> & {
