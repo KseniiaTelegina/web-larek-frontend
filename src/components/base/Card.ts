@@ -43,7 +43,7 @@ export class Card<T> extends Component<IProduct> {
         this._price = container.querySelector('.card__price');
         this._button = container as HTMLButtonElement;
 
-        // this._category.classList.add(`card__category_${CATEGORY_COLORS[value]}`);
+        
 
         if (actions?.onClick) {
             this._button.addEventListener('click', event => {
@@ -75,9 +75,9 @@ export class Card<T> extends Component<IProduct> {
         this.setImage(this._image, value, this.title)
     }
 
-    set price(value: number) {
-        let displayText = value === 0 ? "Бесценно" : `${value}`;
-        this.setText(this._price, `${displayText} синапсов`);
+    set price(value: number | null) {
+        let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
+        this.setText(this._price, displayText);
     }
     
     get price(): number {
@@ -87,35 +87,70 @@ export class Card<T> extends Component<IProduct> {
 
     set category(value: string) {
         this.setText(this._category, value);
+        switch(value) {
+            case 'софт-скил':
+                this._category?.classList.add('card__category_soft');
+                break;
+            case 'другое':
+                this._category?.classList.add('card__category_other');
+                break;
+            case 'хард-скил':
+                this._category?.classList.add('card__category_hard');
+                break;
+            case 'дополнительное':
+                this._category?.classList.add('card__category_additional');
+                break;
+            case 'кнопка':
+                this._category?.classList.add('card__category_button');
+                break;
+            default:
+
+                break;
+            }
     }
+
 
     get category(): string {
         return this._category.textContent || '';
     }
-
-
 }
 
 export class CardPreview extends Card<HTMLElement> {
     protected _description: HTMLElement;
     protected _button: HTMLButtonElement;
 
-    constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct) {
+    constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean) {
         // constructor(protected container: HTMLElement, actions?: ICardActions) {
         super(container);
         this._description = container.querySelector('.card__text');
         this._button = container.querySelector('.button')
 
+        if (isItemInBasket)
+            {   this._button.addEventListener('click', () => {
+                this.events.emit('remove-basket:change', item);
+        })
+                this.buttonText = 'Удалить из корзины'
+            } else {
+                this.buttonText = 'В корзину'
+                this._button.addEventListener('click', () => {
+                    this.events.emit('add-basket:change', item);
+            })
+            }
+
 
         // if (actions?.onClick) {
-            this._button.addEventListener('click', () => {
-                this.events.emit('add-basket:change');
+            // this._button.addEventListener('click', () => {
+            //     this.events.emit('add-basket:change', item);
                 // actions.onClick(event);
-                console.log('кукусики');
+                
             // });
-        })
+        // })
 
     }
+
+    set buttonText(value: string) {
+        this.setText(this._button, value);
+        }
 
     set description(value: string) {
         this.setText(this._description, value);

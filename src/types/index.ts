@@ -15,8 +15,8 @@ export interface IBasketModel {
     // push(id: string): void;
     // items: Map<string, number>;
     items: IProduct[]
-    add(id: string): void;
-    remove(id: string): void;
+    add(id: IProduct): void;
+    remove(id: IProduct): void;
 }
 
 

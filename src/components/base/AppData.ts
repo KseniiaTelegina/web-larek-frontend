@@ -8,10 +8,26 @@ export type CatalogChangeEvent = {
     catalog: IProduct[]
 };
 
+export class BasketModel implements IBasketModel {
+    items: IProduct[] = [];
+    add(item: IProduct) {
+        if (!this.items.some(it => it.id === item.id)) {
+            this.items.push(item)
+            }
+        
+    }
+    remove(id: IProduct): void {
+        // items: IProduct[] = [];
+        // if ()
+    }
+
+
+
+}
 
 export class AppState extends Model<IAppState> {
     
-    basket: string[];
+    basket: string[] = [];
     catalog: IProduct[];
     order: IOrder = {
         address: '',
@@ -20,7 +36,11 @@ export class AppState extends Model<IAppState> {
     };
     preview: string | null;
     formErrors: FormErrors = {};
-    basketModel: IBasketModel;
+    basketModel: IBasketModel = new BasketModel();
+    // {
+    //     items: [],
+    //     add: (id: string) => this.items.push(id)
+    // };
     selectedItem: IProduct;
 
     setCatalog(items: IProduct[]) {
@@ -28,37 +48,39 @@ export class AppState extends Model<IAppState> {
         this.emitChanges('items:changed', { catalog: this.catalog });
     }
 
+    setCardPreview(item: IProduct) {
+        this.preview = item.id;
+        this.emitChanges('preview:changed', item);
+      }
+
+
     setPreview(item: IProduct) {
         this.selectedItem = item;
-        this.emitChanges('items:change', item);
+        this.emitChanges('items:changed', item);
       }
 
 
 
     // проверка на наличие продукта в корзине  
 
-    cardInBasket(item: IProduct) {
-        
+    cardInBasket(item: IProduct): boolean {
+        return this.basketModel.items.some(it => it.id === item.id);
     }
-
-
-
-
 
     // добавление в корзину
 
-    addToBasket(item: IProduct) {
-        this.basketModel.items.push(item);
-        // this.price += item.price;
-        this.emitChanges('basket:change', this.basketModel.items);
-      }
+    // addToBasket(item: IProduct) {
+    //     this.basketModel.items.push(item);
+    //     // this.price += item.price;
+    //     this.emitChanges('basket:change', this.basketModel.items);
+    //   }
 
     // удаление из корзины
 
-    removeFromBasket(item: IProduct) {
-        this.preview = item.id;
-        this.emitChanges('basket:change', this.basketModel.items);
-    }
+    // removeFromBasket(item: IProduct) {
+    //     this.preview = item.id;
+    //     this.emitChanges('basket:change', this.basketModel.items);
+    // }
 
 
     get catalogCards() {
@@ -73,4 +95,6 @@ export class AppState extends Model<IAppState> {
         this.preview = item.id;
         this.emitChanges('preview:changed', item);
     }
+
+}
 

@@ -51,29 +51,6 @@ const basket = new Basket(cloneTemplate(basketTemplate), events);
 // const cardList = new CardItem(cloneTemplate(cardBasketTemplate), events);
 
 // const cardItemBasket = new CardItem(cloneTemplate(cardBasketTemplate), ), {
-//     onClick: () => events.emit('basket:add', item)
-// }
-
-
-
-
-
-// events.on('basket:add', (item: IProduct) => {
-//     console.log('Item has been added to the shopping cart:', item);
-//     appCard.setCardItemBasket(item);
-//     const cardBasket = new Card(cloneTemplate(cardBasketTemplate), {
-//         onClick: () => events.emit('basket:add', item)
-//     });
-//     return cardBasket.render({
-//         title: item.title,
-//         price: item.price,
-//     })
-// })
-
-
-events.on('card:select', (item: IProduct) => {
-    appCard.setCardItemBasket(item)
-  });
 
 
 const appData = new AppState({}, events);
@@ -105,8 +82,7 @@ events.on<CatalogChangeEvent>('items:changed', () => {
 // Открыть карточку продукта
 
 events.on('card:select', (item: IProduct) => {
-    appData.setPreview(item);
-    
+    appData.setCardPreview(item);
 });
 
 
@@ -131,38 +107,21 @@ events.on('basket:change', () => {
 
 
 events.on('add-basket:change', (item: IProduct) => {
-    const card = new Card(cloneTemplate(cardPreviewTemplate), {
-        onClick: () => {
-            if (appData.cardInBasket(item)) {
-                appData.removeFromBasket(item);
-                card.button = 'В корзину';
-            } else {
-                appData.addToBasket(item);
-                card.button = 'Удалить из корзины';
-            }
-            
-        },
-     });
+    // console.log(item);
+    appData.basketModel.add(item);
+    events.emit('basket:change');
+
+    const card = new CardPreview(cloneTemplate(cardPreviewTemplate), events, item, appData.cardInBasket(item) )
     modal.render({ content: card.render(item) });
 });
 
+events.on('remove-basket:change', (item: IProduct) => {
+    appData.basketModel.remove(item);
+    events.emit('basket:change');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const card = new CardPreview(cloneTemplate(cardPreviewTemplate), events, item, appData.cardInBasket(item) )
+    modal.render({ content: card.render(item) });
+})
 
 
 
@@ -304,7 +263,7 @@ events.on('order:open', () => {
 // // Продукт открыт
 events.on('preview:changed', (item: IProduct) => {
     const showItem = (item: IProduct) => {
-        const card = new CardPreview(cloneTemplate(cardPreviewTemplate));
+        const card = new CardPreview(cloneTemplate(cardPreviewTemplate), events, item, appData.cardInBasket(item));
 
         modal.render({
             content: card.render({
