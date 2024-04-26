@@ -4,6 +4,9 @@ import {EventEmitter, IEvents} from "./base/events";
 import { ensureElement, ensureAllElements } from "../utils/utils";
 import { Component } from "./base/Component";
 
+interface ICardActions {
+    onClick: (event: MouseEvent) => void;
+}
 
 export type TabState = {
     selected: string
@@ -14,30 +17,43 @@ export type TabActions = {
 
 
 export class Order extends Form<IOrderForm> {
-    constructor(container: HTMLFormElement, events: IEvents) {
+
+    protected _button: HTMLElement;
+    protected _buttons: HTMLButtonElement[];
+
+
+    constructor(protected container: HTMLFormElement, protected events: IEvents, actions?: ICardActions) {
         super(container, events);
+
+        this._button = this.container.querySelector('.button.order__button');
+        this._buttons = ensureAllElements<HTMLButtonElement>('.button', container);
+
+        if (this._button) {
+            this._button.addEventListener('click', () => {
+                events.emit('contacts:open');
+                console.log('ку ку ку')
+            });
+        }
+
+        // this._buttons.forEach(button => {
+        //     button.addEventListener('click', () => {
+        //         actions?.onClick?.(button.name);
+        //     });
+        // })
+        // if (actions?.onClick) {
+        //     this._buttons.addEventListener('click', event => {
+        //         actions.onClick(event);
+        //         console.log('Clicked on card');
+        //     });
+        // } - для переключения оплаты
+
     }
 
     set address(value: string) {
-        (this.container.elements.namedItem('text') as HTMLInputElement).value = value;
+        (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
     }
-}
 
 
-export class Tabs extends Component<TabState> {
-    protected _buttons: HTMLButtonElement[];
-
-    constructor(container: HTMLElement, actions?: TabActions) {
-        super(container);
-
-        this._buttons = ensureAllElements<HTMLButtonElement>('.button', container);
-
-        this._buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                actions?.onClick?.(button.name);
-            });
-        })
-    }
 
     set selected(name: string) {
         this._buttons.forEach(button => {
@@ -45,4 +61,5 @@ export class Tabs extends Component<TabState> {
             this.setDisabled(button, button.name === name)
         });
     }
+
 }

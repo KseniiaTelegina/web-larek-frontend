@@ -9,14 +9,10 @@ export interface IProduct {
 }
 
 export interface IBasketModel {
-    // id: string;
-    // title: string;
-    // price: number;
-    // push(id: string): void;
-    // items: Map<string, number>;
     items: IProduct[]
     add(id: IProduct): void;
     remove(id: IProduct): void;
+    getTotalPrice(): void;
 }
 
 
@@ -60,17 +56,32 @@ export interface IBasketHeaderButton {
 
 export interface IOrderForm {
     address: string;
+    // items: string[];
+    email: string;
+    phone: string;
     // paymentMethod: PaymentMethod;
 }
 
-export interface IUserForm {
-    email: string;
-    phone: string;
-}
+// export interface IContactsForm {
+  
+//     // items: string[];
+//     email: string;
+//     phone: string;
+// }
+
+// export interface IUserForm {
+//     email: string;
+//     phone: string;
+    
+// }
 
 export interface IOrder extends IOrderForm {
     items: string[]
 }
+
+// export interface IContact extends IUserForm {
+//     items: string[]
+// }
 
 export interface IOrderResult {
     id: string;

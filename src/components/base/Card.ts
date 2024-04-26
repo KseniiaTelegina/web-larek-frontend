@@ -120,22 +120,22 @@ export class CardPreview extends Card<HTMLElement> {
     protected _button: HTMLButtonElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean) {
-        // constructor(protected container: HTMLElement, actions?: ICardActions) {
+        
         super(container);
         this._description = container.querySelector('.card__text');
         this._button = container.querySelector('.button')
 
-        if (isItemInBasket)
-            {   this._button.addEventListener('click', () => {
+        if (isItemInBasket) {
+            this._button.textContent = 'Удалить из корзины';
+            this._button.addEventListener('click', () => {
                 this.events.emit('remove-basket:change', item);
-        })
-                this.buttonText = 'Удалить из корзины'
-            } else {
-                this.buttonText = 'В корзину'
-                this._button.addEventListener('click', () => {
-                    this.events.emit('add-basket:change', item);
-            })
-            }
+            });
+        } else {
+            this._button.textContent = 'В корзину';
+            this._button.addEventListener('click', () => {
+                this.events.emit('add-basket:change', item);
+            });
+        }
 
 
         // if (actions?.onClick) {
