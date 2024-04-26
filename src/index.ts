@@ -107,7 +107,6 @@ events.on('basket:change', () => {
 
 
 events.on('add-basket:change', (item: IProduct) => {
-    // console.log(item);
     appData.basketModel.add(item);
     events.emit('basket:change');
 

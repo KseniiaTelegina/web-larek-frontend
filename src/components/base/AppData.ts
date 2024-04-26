@@ -2,28 +2,14 @@
 
 import {Model} from "./Model"
 import {FormErrors, IProduct, IAppState, IOrder, IBasketModel } from "../../types/index";
+import { BasketModel } from "../Basket";
 // import { appCard } from "../.."; 
 
 export type CatalogChangeEvent = {
     catalog: IProduct[]
 };
 
-export class BasketModel implements IBasketModel {
-    items: IProduct[] = [];
-    add(item: IProduct) {
-        if (!this.items.some(it => it.id === item.id)) {
-            this.items.push(item)
-            }
-        
-    }
-    remove(id: IProduct): void {
-        // items: IProduct[] = [];
-        // if ()
-    }
 
-
-
-}
 
 export class AppState extends Model<IAppState> {
     
@@ -37,10 +23,6 @@ export class AppState extends Model<IAppState> {
     preview: string | null;
     formErrors: FormErrors = {};
     basketModel: IBasketModel = new BasketModel();
-    // {
-    //     items: [],
-    //     add: (id: string) => this.items.push(id)
-    // };
     selectedItem: IProduct;
 
     setCatalog(items: IProduct[]) {
