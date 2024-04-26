@@ -85,18 +85,18 @@ export class CardItem extends Card<HTMLElement> {
     protected _description: HTMLElement;
     protected _button: HTMLButtonElement;
 
-    // constructor(container: HTMLElement, protected events: EventEmitter) {
-        constructor(container: HTMLElement, actions?: ICardActions) {
+    constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct) {
+        // constructor(container: HTMLElement, actions?: ICardActions) {
         super(container);
         this._description = container.querySelector('.card__text');
         this._button = container.querySelector('.button')
 
-                if (actions?.onClick) {
-            this._button.addEventListener('click', event => {
-                actions.onClick(event);
-                console.log('Clicked on card');
-            });
-        }
+        //         if (actions?.onClick) {
+        //     this._button.addEventListener('click', event => {
+        //         actions.onClick( event);
+        //         console.log('Clicked on card');
+        //     });
+        // }
 
         // if (this._button) {
         //     this._button.addEventListener('click', () => {
@@ -104,6 +104,21 @@ export class CardItem extends Card<HTMLElement> {
         //         console.log('Clicked on card');
         //     });
         // }
+
+        if (this._button) {
+            this._button.addEventListener('click', () => {
+                this.events.emit('basket:add', item);
+                console.log('Clicked on card and added to basket', item);
+            });
+        }
+
+        // this._button.addEventListener('click', () => {
+        //     this.events.emit('basket:add', item); // Событие для добавления в корзину
+        //     appCard.cardInBasket.push(item); // Добавление товара в общий список корзины
+        //     this.events.emit('basket:refresh'); // Эмит нового события для обновления отображения корзины
+        //     console.log('Clicked on card and added to basket', item);
+        // });
+    
     }
 
     set description(value: string) {
@@ -113,6 +128,8 @@ export class CardItem extends Card<HTMLElement> {
     get description(): string {
         return this._description.textContent || '';
     }
+
+    
 }
 
 // export interface ICard {

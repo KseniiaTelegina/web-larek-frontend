@@ -30,6 +30,16 @@ export class ProductAPI extends Api implements IProductAPI {
         );
     }
 
+    // getCardItemBasket(id: string): Promise<ICard> {
+    //     return this.get(`/product/${id}`).then(
+    //         (item: ICard) => ({
+    //             ...item,
+    //             // image: this.cdn + item.image,
+    //             description: item.description
+    //         })
+    //     );
+    // }
+
     getOpenBasket(id: string): Promise<ICard> {
         return this.get(`/product/${id}`).then(
             (item: ICard) => ({

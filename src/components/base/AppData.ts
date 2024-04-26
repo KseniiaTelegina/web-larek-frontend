@@ -2,6 +2,7 @@
 
 import {Model} from "./Model"
 import {FormErrors, IProduct, IAppState, IOrder, IBasketModel} from "../../types/index";
+import { appCard } from "../.."; 
 
 export type CatalogChangeEvent = {
     catalog: IProduct[]
@@ -37,6 +38,19 @@ export class AppState extends Model<IAppState> {
         this.preview = item.id;
         this.emitChanges('preview:changed', item);
     }
+
+    
+    setPreviewCardBasket(item: IProduct) {
+        this.preview = item.id;
+        this.emitChanges('basket:items-changed', item);
+      }
+
+    // updateBasket(item: IBasketModel) {
+    //     // Предположим, что itemRenderer функция преобразует IProduct в HTMLElement
+    //     const items = appCard.cardInBasket.map(item => itemRenderer(item));
+    //     this.items = items;  // Это вызывает сеттер set items который обновит UI
+    //     this.total = appCard.cardInBasket.reduce((acc, item) => acc + item.price, 0);
+    // }
 }
 
 // export class AppState extends Model<IAppState> {
