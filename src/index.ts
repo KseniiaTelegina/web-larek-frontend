@@ -17,6 +17,7 @@ import { Order } from './components/Order';
 import { appCard } from './components/base/Card';
 import { Contacts} from './components/Contacts';
 import { Success } from './components/Success';
+
 // import { a} from './components/base/Card';
 // import { createElement } from '../src/utils/utils';
 
@@ -51,6 +52,12 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events)
+// const tabs = new Order(cloneTemplate(orderTemplate), {
+//     onClick: (name) => {
+//         if (name === 'closed') events.emit('basket:open');
+//         else events.emit('bids:open');
+//     }
+// });
 // const success = new Success(cloneTemplate(successTemplate), events)
 
 // const cardList = new CardItem(cloneTemplate(cardBasketTemplate), events);
@@ -119,11 +126,13 @@ events.on('card:select', (item: IProduct) => {
 
 
 // Открыть корзину
-const basketView = new BasketModel();
+// const basketView = new BasketModel();
 
 events.on('basket:open', () => {
-    modal.render({content: basket.render({price: 
-        basketView.getTotalPrice()})})
+    modal.render({ content: basket.render() });
+
+    // modal.render({content: basket.render({price: 
+    //     basketView.getTotalPrice()})})
         
     // modal.render({ content: basket.render() });
   });
@@ -149,6 +158,7 @@ events.on('contacts:open', () => {
         content: contacts.render({
             phone: '',
             email: '',
+            payment: '',
             valid: false,
             errors: []
         })
@@ -190,6 +200,7 @@ events.on('basket:change', () => {
         const item = Array.from(appData.basketModel.items).find((catalogItem) => catalogItem.id === basketItem.id);
         const card = new Card(cloneTemplate(cardBasketTemplate), {
           onClick: () => events.emit('basket:change', item)});
+          basket.total = appData.getTotalPrice();
         return card.render(item);
     });
 });
@@ -199,18 +210,16 @@ events.on('add-basket:change', (item: IProduct) => {
     events.emit('basket:change'); // Вызовется обработчик 'basket:change', который также обновит итоговую сумму
     const card = new CardPreview(cloneTemplate(cardPreviewTemplate), events, item, appData.cardInBasket(item))
     modal.render({ content: card.render(item) });
-    // appData.basketModel.getTotalPrice()
+    // basket.total = appData.getTotalPrice();
 });
 
 events.on('remove-basket:change', (item: IProduct) => {
     appData.basketModel.remove(item);
-    events.emit('basket:change'); // Аналогично, обновление суммы произойдёт посредством 'basket:change'
+    events.emit('basket:change'); // Вызовется обработчик 'basket:change', который также обновит итоговую сумму
     const card = new CardPreview(cloneTemplate(cardPreviewTemplate), events, item, appData.cardInBasket(item))
     modal.render({ content: card.render(item) });
-    // appData.basketModel.getTotalPrice()
+    // basket.total = appData.getTotalPrice();
 });
-
-
 
 
 

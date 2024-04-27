@@ -20,13 +20,15 @@ export class Basket extends Component<IBasketView> {
     protected _list: HTMLElement;
     protected _total: HTMLElement;
     protected _button: HTMLElement;
+    protected _buttonDelete: HTMLElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
 
         this._list = this.container.querySelector('.basket__list');
-        this._total = this.container.querySelector('.basket__total');
+        this._total = this.container.querySelector('.basket__price');
         this._button = this.container.querySelector('.basket__button');
+    
 
         if (this._button) {
             this._button.addEventListener('click', () => {
@@ -50,12 +52,23 @@ export class Basket extends Component<IBasketView> {
             this.setDisabled(this._button, true);
         }
     }
-    set total(total: number) {
-        this.setText(this._total, formatNumber(total));
+    // set total(total: number) {
+    //     this.setText(this._total, formatNumber(total));
 
+    // }
+    set total(value: number | null) {
+        let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
+        this.setText(this._total, displayText);
+    }
+    
+    get total(): number {
+        const textContent = this._total.textContent.replace(" синапсов", "");
+        return textContent === "Бесценно" ? 0 : Number(textContent);
     }
 
-
+    // getElement() {
+    //     return this._list;
+    // }
 }
 
 export class BasketModel implements IBasketModel {
@@ -69,13 +82,7 @@ export class BasketModel implements IBasketModel {
     remove(item: IProduct) {
         this.items = this.items.filter(it => it.id !== item.id);
     }
-    getTotalPrice() {
-        // console.log('ghghghghhgg');
-        return this.items.reduce((total, item) => {
-            // console.log('ghghghghhgg');
-            return total + (item.price || 0);  
-        }, 0);  
-    }
+    
 }
 
 

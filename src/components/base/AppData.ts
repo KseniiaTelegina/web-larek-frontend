@@ -20,65 +20,6 @@ export class LotItem extends Model<IProduct> {
 
     protected myPrice: number = 0;
 
-    // clearBid() {
-    //     this.myPrice = 0;
-    // }
-
-    // placeBid(price: number): void {
-    //     this.price = price;
-    //     this.history = [...this.history.slice(1), price];
-    //     this.myLastBid = price;
-
-    //     if (price > (this.minPrice * 10)) {
-    //         this.status = 'closed';
-    //     }
-    //     this.emitChanges('auction:changed', { id: this.id, price });
-    // }
-
-    // get isMyBid(): boolean {
-    //     return this.myLastBid === this.price;
-    // }
-
-    // get isParticipate(): boolean {
-    //     return this.myLastBid !== 0;
-    // }
-
-    // get statusLabel(): string {
-    //     switch (this.status) {
-    //         case "active":
-    //             return `Открыто до ${dayjs(this.datetime).format('D MMMM [в] HH:mm')}`
-    //         case "closed":
-    //             return `Закрыто ${dayjs(this.datetime).format('D MMMM [в] HH:mm')}`
-    //         case "wait":
-    //             return `Откроется ${dayjs(this.datetime).format('D MMMM [в] HH:mm')}`
-    //         default:
-    //             return this.status;
-    //     }
-    // }
-
-    // get timeStatus(): string {
-    //     if (this.status === 'closed') return 'Аукцион завершен';
-    //     else return dayjs
-    //         .duration(dayjs(this.datetime).valueOf() - Date.now())
-    //         .format('D[д] H[ч] m[ мин] s[ сек]');
-    // }
-
-    // get auctionStatus(): string {
-    //     switch (this.status) {
-    //         case 'closed':
-    //             return `Продано за ${formatNumber(this.price)}₽`;
-    //         case 'wait':
-    //             return 'До начала аукциона';
-    //         case 'active':
-    //             return 'До закрытия лота';
-    //         default:
-    //             return '';
-    //     }
-    // }
-
-    // get nextBid(): number {
-    //     return Math.floor(this.price * 1.1);
-    // }
 }
 
 
@@ -93,12 +34,14 @@ export class AppState extends Model<IAppState> {
         address: '',
         email: '',
         phone: '',
-        items: []
+        items: [],
+        payment: '',
     };
     preview: string | null;
     formErrors: FormErrors = {};
     basketModel: IBasketModel = new BasketModel();
     selectedItem: IProduct;
+    price: IProduct;
 
     setCatalog(items: IProduct[]) {
         this.catalog = items;
@@ -120,8 +63,10 @@ export class AppState extends Model<IAppState> {
         return this.catalog;
     }
 
-    getTotal() {
-        return this.order.items.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0)
+    getTotalPrice() {
+        return this.basketModel.items.reduce((total, product) => {
+            return total + (product.price || 0);  
+        }, 0);  
     }
 
     setButton(item: IProduct) {
@@ -150,15 +95,15 @@ export class AppState extends Model<IAppState> {
 
     validateOrder() {
         const errors: typeof this.formErrors = {};
-        if (!this.order.email) {
-            errors.email = 'Необходимо указать email';
-        }
-        if (!this.order.phone) {
-            errors.phone = 'Необходимо указать телефон';
-        }
-        if (!this.order.address) {
-            errors.address = 'Необходимо указать адрес';
-        }
+        // if (!this.order.email) {
+        //     errors.email = 'Необходимо указать email';
+        // }
+        // if (!this.order.phone) {
+        //     errors.phone = '';
+        // }
+        // if (!this.order.address) {
+        //     errors.address = '';
+        // }
         this.formErrors = errors;
         this.events.emit('formErrors:change', this.formErrors);
         return Object.keys(errors).length === 0;

@@ -12,7 +12,6 @@ export interface IBasketModel {
     items: IProduct[]
     add(id: IProduct): void;
     remove(id: IProduct): void;
-    getTotalPrice(): void;
 }
 
 
@@ -33,7 +32,6 @@ export interface IAppState {
     basket: string[];
     preview: string | null;
     order: IOrder | null;
-    // loading: boolean;
 }
 
 export interface IBasketHeaderButton {
@@ -59,6 +57,8 @@ export interface IOrderForm {
     // items: string[];
     email: string;
     phone: string;
+    payment: string;
+   
     // paymentMethod: PaymentMethod;
 }
 
@@ -77,6 +77,7 @@ export interface IOrderForm {
 
 export interface IOrder extends IOrderForm {
     items: string[]
+    // selected: boolean;
 }
 
 // export interface IContact extends IUserForm {
