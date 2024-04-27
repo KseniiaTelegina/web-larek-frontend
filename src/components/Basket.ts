@@ -16,6 +16,7 @@ interface IBasketView {
     title: string;
     price: number;
 }
+
 export class Basket extends Component<IBasketView> {
     protected _list: HTMLElement;
     protected _total: HTMLElement;
@@ -28,6 +29,7 @@ export class Basket extends Component<IBasketView> {
         this._list = this.container.querySelector('.basket__list');
         this._total = this.container.querySelector('.basket__price');
         this._button = this.container.querySelector('.basket__button');
+        this._buttonDelete = this.container.querySelector('.basket__item-delete');
     
 
         if (this._button) {
@@ -41,9 +43,7 @@ export class Basket extends Component<IBasketView> {
         
     } 
     set items(items: HTMLElement[]) {
-        if (items.length) {
-            this._list.replaceChildren(...items);
-        } 
+        this._list.replaceChildren(...items);
     }
     set selected(items: string[]) {
         if (items.length) {
@@ -78,14 +78,16 @@ export class BasketModel implements IBasketModel {
         if (!this.items.some(it => it.id === item.id)) {
             this.items.push(item)
             }  
+            console.log('удаление')
+            console.log(item)
+            console.log(this.items)
     }
     remove(item: IProduct) {
-        this.items = this.items.filter(it => it.id !== item.id);
-    }
-    
+      this.items = this.items.filter(it => it.id !== item.id)
+      console.log(this.items)
+        
+    } 
 }
-
-
 
 
 
