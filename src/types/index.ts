@@ -5,7 +5,10 @@ export interface IProduct {
     image: string;
     category: string;
     description?: string;
-    price: number | null;   
+    price: number | null;
+    index?: string;
+    button: string;
+    buttonDelete: string;
 }
 
 export interface IBasketModel {
@@ -58,6 +61,7 @@ export interface IOrderForm {
     email: string;
     phone: string;
     payment: string;
+    button: string;
    
     // paymentMethod: PaymentMethod;
 }

@@ -3,14 +3,8 @@ import { bem, ensureElement } from "../../utils/utils";
 import { IEvents } from "./events";
 import { IProduct} from "../../types";
 import { EventEmitter } from "./events";
+import { formatNumber } from "../../utils/utils";
 
-// const CATEGORY_COLORS = <Record<string, string>>{
-//     'дополнительное': 'additional',
-//     'софт-скил': 'soft',
-//     'кнопка': 'button',
-//     'хард-скил': 'hard',
-//     'другое': 'other',
-//   }
 
 export const appCard = {
     productArray: [] as IProduct[],
@@ -32,7 +26,10 @@ export class Card<T> extends Component<IProduct> {
     protected _price: HTMLElement;
     protected _category: HTMLElement;
     protected _button?: HTMLButtonElement;
+    protected _index: HTMLElement;
+    // protected _buttonDelete: HTMLElement;
     button: string;
+
 
     constructor(protected container: HTMLElement, actions?: ICardActions) {
         super(container);
@@ -41,19 +38,27 @@ export class Card<T> extends Component<IProduct> {
         this._category = container.querySelector('.card__category'); 
         this._image = container.querySelector('.card__image');
         this._price = container.querySelector('.card__price');
+        this._index = this.container.querySelector('.basket__item-index')
         this._button = container as HTMLButtonElement;
 
         
-
         if (actions?.onClick) {
-            this._button.addEventListener('click', event => {
-                actions.onClick(event);
-                console.log('Clicked on card');
-            });
-        }
-        
+            if(this._button) {
+                this._button.addEventListener('click', actions.onClick)
+            } else {
+                container.addEventListener('click', actions.onClick)
+            }
+        }        
     }
 
+
+    set index(value: string) {
+        this.setText(this._index, value);
+    }
+
+    get index(): string {
+        return this._index.textContent || '';
+    }
 
     set id(value: string) {
         this.container.dataset.id = value;
@@ -115,42 +120,37 @@ export class Card<T> extends Component<IProduct> {
     }
 }
 
-export class CardPreview extends Card<HTMLElement> {
+export class CardPreview extends Card<IProduct> {
     protected _description: HTMLElement;
     protected _button: HTMLButtonElement;
+    // protected _buttonDelete: HTMLElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean) {
-        
+       
         super(container);
         this._description = container.querySelector('.card__text');
-        this._button = container.querySelector('.button')
+        this._button = container.querySelector('.card__button')
+        // this._buttonDelete = this.container.querySelector('.basket__item-delete');
 
         if (isItemInBasket) {
             this._button.textContent = 'Удалить из корзины';
             this._button.addEventListener('click', () => {
-                this.events.emit('remove-basket:change', item);
+                this.events.emit('removeFromBasket:change', item);
             });
         } else {
             this._button.textContent = 'В корзину';
             this._button.addEventListener('click', () => {
-                this.events.emit('add-basket:change', item);
-            });
+                this.events.emit('addInBasket:change', item);
+            });           
         }
 
-
-        // if (actions?.onClick) {
-            // this._button.addEventListener('click', () => {
-            //     this.events.emit('add-basket:change', item);
-                // actions.onClick(event);
-                
-            // });
-        // })
-
+        // if (this._buttonDelete) {
+        //     this._buttonDelete.addEventListener('click', () => {
+        //         this.events.emit('removeFromBasket:change', item);
+        //         console.log('Продукт удален');
+        //     });
+        // }
     }
-
-    set buttonText(value: string) {
-        this.setText(this._button, value);
-        }
 
     set description(value: string) {
         this.setText(this._description, value);
@@ -159,4 +159,28 @@ export class CardPreview extends Card<HTMLElement> {
     get description(): string {
         return this._description.textContent || '';
     }
+
+    set price(value: number | null) {
+        let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
+        this.setText(this._price, displayText);
+
+        if (value === null) {
+            this.setDisabled(this._button, true);
+            this._button.textContent = 'Не продается';
+        } else {
+            this.setDisabled(this._button, false);
+        }
+    }
+
+    get price(): number {
+        const textContent = this._price.textContent.replace(' синапсов', '');
+        return textContent === "Бесценно" ? 0 : Number(textContent);
+    }
 }
+
+
+
+
+    // set button (value: string) {
+    //     this.setText(this._button, value);
+    //     }

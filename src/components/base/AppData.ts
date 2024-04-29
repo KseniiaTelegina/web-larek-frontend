@@ -36,6 +36,7 @@ export class AppState extends Model<IAppState> {
         phone: '',
         items: [],
         payment: '',
+        button: ''
     };
     preview: string | null;
     formErrors: FormErrors = {};

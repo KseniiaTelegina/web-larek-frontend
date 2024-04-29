@@ -22,6 +22,8 @@ export class Modal extends Component<IModalData> {
         this._content.replaceChildren(value);
     }
 
+    
+
     open() {
         this.container.classList.add('modal_active');
         this.events.emit('modal:open');

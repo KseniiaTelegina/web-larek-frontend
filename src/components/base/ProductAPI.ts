@@ -9,7 +9,7 @@ export interface IProductAPI {
     getCardItem: (id: string) => Promise<ICard>;
     getOpenCard: (id: string) => Promise<OpenCard>;
     // placeBid(id: string, bid: IBid): Promise<LotUpdate>;
-    orderCard: (order: IOrder) => Promise<IOrderResult>;
+    orderProduct: (order: IOrder) => Promise<IOrderResult>;
 }
 
 export class ProductAPI extends Api implements IProductAPI {
@@ -72,7 +72,7 @@ export class ProductAPI extends Api implements IProductAPI {
     //     );
     // }
 
-    orderCard(order: IOrder): Promise<IOrderResult> {
+    orderProduct(order: IOrder): Promise<IOrderResult> {
         return this.post('/order', order).then(
             (data: IOrderResult) => data
         );
