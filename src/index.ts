@@ -62,7 +62,7 @@ api
 
 events.on<CatalogChangeEvent>('items:changed', () => {
 	page.catalog = appData.catalog.map((item) => {
-		const card = new Card(cloneTemplate(cardCatalogTemplate), {
+		const card = new Card(cloneTemplate(cardCatalogTemplate), events, item, {
 			onClick: () => events.emit('card:select', item),
 		});
 		return card.render({
@@ -151,7 +151,7 @@ events.on('basket:change', () => {
 		const item = Array.from(appData.basketModel.items).find(
 			(catalogItem) => catalogItem.id === basketItem.id
 		);
-		const card = new Card(cloneTemplate(cardBasketTemplate), {
+		const card = new Card(cloneTemplate(cardBasketTemplate), events, item, {
 			onClick: () => events.emit('basket:change', item),
 		});
 		return card.render({
@@ -185,7 +185,9 @@ events.on('removeFromBasket:change', (item: IProduct) => {
 	modal.render({ content: card.render(item) });
 });
 
-
+events.on('removeFromBasketInBasket:change', (item: IProduct) => {
+	appData.basketModel.remove(item);
+});
 
 
 

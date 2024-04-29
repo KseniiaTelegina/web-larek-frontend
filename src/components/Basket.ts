@@ -23,7 +23,6 @@ export class Basket extends Component<IBasketView> {
     protected _list: HTMLElement;
     protected _price: HTMLElement;
     protected _button: HTMLElement;
-    protected _buttonDelete: HTMLElement;
     protected _index: HTMLElement;
 
 
@@ -33,7 +32,6 @@ export class Basket extends Component<IBasketView> {
         this._list = this.container.querySelector('.basket__list');
         this._price = this.container.querySelector('.basket__price');
         this._button = this.container.querySelector('.basket__button');
-        this._buttonDelete = this.container.querySelector('.basket__item-delete');
         this._index = this.container.querySelector('.basket__item-index')
 
     
@@ -44,12 +42,6 @@ export class Basket extends Component<IBasketView> {
             });
         }
 
-        if (this._buttonDelete) {
-            this._buttonDelete.addEventListener('click', () => {
-                events.emit('remove-basket:change');
-                console.log('бу бу бу')
-            });
-        }
 
         this.items = [];
         

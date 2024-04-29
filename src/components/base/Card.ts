@@ -27,11 +27,12 @@ export class Card<T> extends Component<IProduct> {
     protected _category: HTMLElement;
     protected _button?: HTMLButtonElement;
     protected _index: HTMLElement;
-    // protected _buttonDelete: HTMLElement;
+    protected _buttonDelete: HTMLElement;
+    
     button: string;
 
 
-    constructor(protected container: HTMLElement, actions?: ICardActions) {
+    constructor(protected container: HTMLElement, protected events: EventEmitter, item: IProduct, actions?: ICardActions) {
         super(container);
 
         this._title = container.querySelector('.card__title');
@@ -40,6 +41,7 @@ export class Card<T> extends Component<IProduct> {
         this._price = container.querySelector('.card__price');
         this._index = this.container.querySelector('.basket__item-index')
         this._button = container as HTMLButtonElement;
+        this._buttonDelete = this.container.querySelector('.basket__item-delete');
 
         
         if (actions?.onClick) {
@@ -48,7 +50,14 @@ export class Card<T> extends Component<IProduct> {
             } else {
                 container.addEventListener('click', actions.onClick)
             }
-        }        
+        }
+        
+        if (this._buttonDelete) {
+            this._buttonDelete.addEventListener('click', () => {
+                this.events.emit('removeFromBasketInBasket:change', item);
+                console.log('Продукт удален');
+            });
+        }
     }
 
 
@@ -127,7 +136,7 @@ export class CardPreview extends Card<IProduct> {
 
     constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean) {
        
-        super(container);
+        super(container, events, item);
         this._description = container.querySelector('.card__text');
         this._button = container.querySelector('.card__button')
         // this._buttonDelete = this.container.querySelector('.basket__item-delete');
