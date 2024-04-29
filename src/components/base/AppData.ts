@@ -65,6 +65,7 @@ export class AppState extends Model<IAppState> {
     }
 
     getTotalPrice() {
+        console.log(this.basketModel.items)
         return this.basketModel.items.reduce((total, product) => {
             return total + (product.price || 0);  
         }, 0);  

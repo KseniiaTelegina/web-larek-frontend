@@ -9,7 +9,7 @@ import { ensureElement } from '../src/utils/utils';
 import { Page } from './components/base/Page';
 import { ProductAPI } from './components/base/ProductAPI';
 import { AppState, CatalogChangeEvent } from './components/base/AppData';
-import { Card, CardPreview } from './components/base/Card';
+import { Card } from './components/base/Card';
 import { cloneTemplate } from '../src/utils/utils';
 import { IProduct, IOrderForm, ICard } from './types';
 import { Basket, BasketModel } from './components/Basket';
@@ -44,8 +44,7 @@ const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
 const appData = new AppState({}, events);
 
-api
-	.getCardList()
+api.getCardList()
 	.then(appData.setCatalog.bind(appData))
 	.catch((err) => {
 		console.error(err);
@@ -62,7 +61,7 @@ api
 
 events.on<CatalogChangeEvent>('items:changed', () => {
 	page.catalog = appData.catalog.map((item) => {
-		const card = new Card(cloneTemplate(cardCatalogTemplate), events, item, {
+		const card = new Card(cloneTemplate(cardCatalogTemplate), events, item, false, {
 			onClick: () => events.emit('card:select', item),
 		});
 		return card.render({
@@ -100,6 +99,7 @@ events.on('order:open', () => {
 		}
 	);
 });
+
 //отправить
 // events.on('contacts:open', () => {
 //     api.orderProduct(appData.order)
@@ -129,17 +129,17 @@ events.on('order:open', () => {
 
 // Открыть и отправить форму заказа с телефоном и почтой
 // условно рабочий вариант
-// events.on('contacts:open', () => {
-// 	modal.render({
-// 		content: contacts.render({
-// 			phone: '',
-// 			email: '',
-// 			payment: '',
-// 			valid: false,
-// 			errors: [],
-// 		}),
-// 	});
-// });
+events.on('contacts:open', () => {
+	modal.render({
+		content: contacts.render({
+			phone: '',
+			email: '',
+			payment: '',
+			valid: false,
+			errors: [],
+		}),
+	});
+});
 
 // корзина
 
@@ -151,11 +151,13 @@ events.on('basket:change', () => {
 		const item = Array.from(appData.basketModel.items).find(
 			(catalogItem) => catalogItem.id === basketItem.id
 		);
-		const card = new Card(cloneTemplate(cardBasketTemplate), events, item, {
-			onClick: () => events.emit('basket:change', item),
+		const card = new Card(cloneTemplate(cardBasketTemplate), events, item, true, {
+			onClick: () => events.emit('basket:change'),
 		});
 		return card.render({
-			index: String(index + 1)
+			index: String(index + 1),
+			title: item.title,
+			price: item.price,
 		});
 	});
 });
@@ -164,25 +166,26 @@ events.on('addInBasket:change', (item: IProduct) => {
 	appData.basketModel.add(item);
 	events.emit('basket:change');
 
-	const card = new CardPreview(
+	const cardBasket = new Card (
 		cloneTemplate(cardPreviewTemplate),
 		events,
 		item,
 		appData.cardInBasket(item)
 	);
-	modal.render({ content: card.render(item) });
+	modal.render({ content: cardBasket.render(item) });
 });
 
 events.on('removeFromBasket:change', (item: IProduct) => {
 	appData.basketModel.remove(item);
 	events.emit('basket:change');
-	const card = new CardPreview(
+	const cardBasket = new Card (
 		cloneTemplate(cardPreviewTemplate),
 		events,
 		item,
 		appData.cardInBasket(item)
 	);
-	modal.render({ content: card.render(item) });
+	
+	modal.render({ content: cardBasket.render(item) });
 });
 
 events.on('removeFromBasketInBasket:change', (item: IProduct) => {
@@ -196,7 +199,7 @@ events.on('removeFromBasketInBasket:change', (item: IProduct) => {
 events.on('preview:changed', (item: IProduct) => {
 	const showItem = (item: IProduct) => {
         const basketItems = appData.basketModel.items;
-		const card = new CardPreview(
+		const card = new Card (
 			cloneTemplate(cardPreviewTemplate),
 			events,
 			item,

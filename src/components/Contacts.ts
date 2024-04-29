@@ -62,7 +62,7 @@ export class Contacts extends Form<IOrderForm> {
         const emailValue = (this.container.elements.namedItem('email') as HTMLInputElement).value = value;
         
         if (phoneValue && emailValue) {
-            this.setDisabled(this._button, true);
+            this.setDisabled(this._button, false);
         }
     }
 

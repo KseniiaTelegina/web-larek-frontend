@@ -7,8 +7,9 @@ export interface IProduct {
     description?: string;
     price: number | null;
     index?: string;
-    button: string;
-    buttonDelete: string;
+    button?: string;
+    buttonDelete?: string;
+    buttonInBasket?: string;
 }
 
 export interface IBasketModel {
