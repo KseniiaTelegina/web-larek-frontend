@@ -187,6 +187,7 @@ events.on('removeFromBasket:change', (item: IProduct) => {
 
 events.on('removeFromBasketInBasket:change', (item: IProduct) => {
 	appData.basketModel.remove(item);
+
 });
 
 

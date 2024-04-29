@@ -28,11 +28,15 @@ export class Card<T> extends Component<IProduct> {
     protected _button?: HTMLButtonElement;
     protected _index: HTMLElement;
     protected _buttonDelete: HTMLElement;
+
+    // protected _description: HTMLElement;
+    // protected _buttonInBasket: HTMLButtonElement;
     
     button: string;
 
 
     constructor(protected container: HTMLElement, protected events: EventEmitter, item: IProduct, actions?: ICardActions) {
+        // constructor(protected container: HTMLElement,  actions?: ICardActions) {
         super(container);
 
         this._title = container.querySelector('.card__title');
@@ -42,6 +46,9 @@ export class Card<T> extends Component<IProduct> {
         this._index = this.container.querySelector('.basket__item-index')
         this._button = container as HTMLButtonElement;
         this._buttonDelete = this.container.querySelector('.basket__item-delete');
+
+        // this._description = container.querySelector('.card__text');
+        // this._buttonInBasket = container.querySelector('.card__button')
 
         
         if (actions?.onClick) {
@@ -155,7 +162,7 @@ export class CardPreview extends Card<IProduct> {
 
         // if (this._buttonDelete) {
         //     this._buttonDelete.addEventListener('click', () => {
-        //         this.events.emit('removeFromBasket:change', item);
+        //         this.events.emit('removeFromBasketInBasket:change', item);
         //         console.log('Продукт удален');
         //     });
         // }
@@ -186,10 +193,3 @@ export class CardPreview extends Card<IProduct> {
         return textContent === "Бесценно" ? 0 : Number(textContent);
     }
 }
-
-
-
-
-    // set button (value: string) {
-    //     this.setText(this._button, value);
-    //     }
