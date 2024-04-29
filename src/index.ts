@@ -257,12 +257,27 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 	contacts.errors = Object.values({ phone, email })
 		.filter((i) => !!i)
 		.join('; ');
+	
 });
 
 // Изменилось одно из полей
 events.on(
 	/^order\..*:change/,
-	(data: { field: keyof IOrderForm; value: string }) => {
-		appData.setOrderField(data.field, data.value);
+	(data: { address: keyof IOrderForm, value: string }) => {
+		appData.setOrderFieldAddressForm(data.address, data.value);
 	}
 );
+
+
+
+events.on(
+	/^order\..*:change/,
+	(data: { phone: keyof IOrderForm, email: keyof IOrderForm, value: string}) => {
+		appData.setOrderFieldContactsForm(data.phone, data.email, data.value);
+	}
+);
+
+
+
+
+

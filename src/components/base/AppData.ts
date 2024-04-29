@@ -82,38 +82,59 @@ export class AppState extends Model<IAppState> {
         return this.basketModel.items.some(it => it.id === item.id);
     }
 
-    setOrderField(field: keyof IOrderForm, value: string) {
-        this.order[field] = value;
+    // setOrderField(field: keyof IOrderForm, value: string) {
+    //     this.order[field] = value;
 
-        if (this.validateOrder()) {
-            this.events.emit('order:ready', this.order);
+    //     if (this.validateOrder()) {
+    //         this.events.emit('order:ready', this.order);
+    //     }
+    // }
+
+
+    setOrderFieldAddressForm(address: keyof IOrderForm, value: string) {
+        this.order[address] = value;
+   
+    
+        if (this.validateOrderAddressForm()) {
+            this.events.emit('order:ready', { address: this.order.address });
+        }
+    }
+    
+    setOrderFieldContactsForm(phone: keyof IOrderForm, email: keyof IOrderForm, value: string) {
+        this.order[phone] = value;
+        this.order[email] = value;
+    
+        if (this.validateContactsForm()) {
+            this.events.emit('order:ready', { phone: this.order.phone, email: this.order.email });
         }
     }
 
-    // getSelectProduct(): IProduct[] {
-    //     return this.catalog
-    //         .filter(item => item.status === 'closed' && item.isMyBid)
-    // }
-
-    validateOrder() {
+    validateOrderAddressForm() {
         const errors: typeof this.formErrors = {};
-        // if (!this.order.email) {
-        //     errors.email = 'Необходимо указать email';
-        // }
-        // if (!this.order.phone) {
-        //     errors.phone = '';
-        // }
-        // if (!this.order.address) {
-        //     errors.address = '';
-        // }
+        if (!this.order.address) {
+            errors.address = 'Необходимо указать адрес';
+        }
         this.formErrors = errors;
         this.events.emit('formErrors:change', this.formErrors);
         return Object.keys(errors).length === 0;
     }
 
-    // totalPrice() {
+    validateContactsForm() {
+        const errors: typeof this.formErrors = {};
+        if (!this.order.email) {
+            errors.email = 'Необходимо указать email';
+        }
+        if (!this.order.phone) {
+            errors.phone = 'Необходимо указать телефон';
+        }
+        this.formErrors = errors;
+        this.events.emit('formErrors:change', this.formErrors);
+        return Object.keys(errors).length === 0;
+    }
 
-
+        // getSelectProduct(): IProduct[] {
+    //     return this.catalog
+    //         .filter(item => item.status === 'closed' && item.isMyBid)
     // }
 }
 

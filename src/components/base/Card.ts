@@ -39,8 +39,8 @@ export class Card<T> extends Component<IProduct> {
         // constructor(protected container: HTMLElement,  actions?: ICardActions) {
         super(container);
 
-        // this._title = container.querySelector('.card__title');
-        this._title = ensureElement<HTMLElement>('.card__title', container)
+        this._title = container.querySelector('.card__title');
+        // this._title = ensureElement<HTMLElement>('.card__title', container)
         this._category = container.querySelector('.card__category'); 
         this._image = container.querySelector('.card__image');
         this._price = container.querySelector('.card__price');

@@ -16,9 +16,9 @@ import { Component } from "./base/Component";
 // }
 // 
 
-interface IContactActions {
-    onClick: () => void;
-}
+// interface IContactActions {
+//     onClick: () => void;
+// }
 
 export class Contacts extends Form<IOrderForm> {
 
@@ -76,3 +76,7 @@ export class Contacts extends Form<IOrderForm> {
     // }
 }
 
+
+// set address(value: string) {
+//     (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
+// }
