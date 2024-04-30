@@ -1,7 +1,8 @@
 // import {dayjs, formatNumber} from "../utils/utils";
 
 import {Model} from "./Model"
-import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm } from "../../types/index";
+import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm, IContactsForm, FormErrorsContact } from "../../types/index";
+// import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm} from "../../types/index";
 import { BasketModel } from "../Basket";
 // import { appCard } from "../.."; 
 
@@ -9,18 +10,18 @@ export type CatalogChangeEvent = {
     catalog: IProduct[]
 };
 
-export class LotItem extends Model<IProduct> {
-    selected: boolean;
-    id: string;
-    title: string;
-    image: string;
-    category: string;
-    description?: string;
-    price: number | null;  
+// export class LotItem extends Model<IProduct> {
+//     selected: boolean;
+//     id: string;
+//     title: string;
+//     image: string;
+//     category: string;
+//     description?: string;
+//     price: number | null;  
 
-    protected myPrice: number = 0;
+//     protected myPrice: number = 0;
 
-}
+// }
 
 
 
@@ -32,14 +33,19 @@ export class AppState extends Model<IAppState> {
     catalog: IProduct[];
     order: IOrder = {
         address: '',
-        email: '',
-        phone: '',
+        // email: '',
+        // phone: '',
         items: [],
         payment: '',
-        button: ''
+        // button: ''
+    };
+    contacts: IContactsForm = {
+        email: '',
+        phone: '',
     };
     preview: string | null;
     formErrors: FormErrors = {};
+    formErrorsContact: FormErrorsContact = {};
     basketModel: IBasketModel = new BasketModel();
     selectedItem: IProduct;
     price: IProduct;
@@ -82,78 +88,55 @@ export class AppState extends Model<IAppState> {
         return this.basketModel.items.some(it => it.id === item.id);
     }
 
-    // setOrderField(field: keyof IOrderForm, value: string) {
-    //     this.order[field] = value;
+    setOrderFieldAddressForm(field: keyof IOrderForm, value: string) {
+        this.order[field] = value;
 
-    //     if (this.validateOrder()) {
-    //         this.events.emit('order:ready', this.order);
-    //     }
-    // }
-
-
-    setOrderFieldAddressForm(address: keyof IOrderForm, value: string) {
-        this.order[address] = value;
-   
-    
         if (this.validateOrderAddressForm()) {
-            this.events.emit('order:ready', { address: this.order.address });
+            this.events.emit('order:ready', this.order);
         }
     }
-    
-    setOrderFieldContactsForm(phone: keyof IOrderForm, email: keyof IOrderForm, value: string) {
-        this.order[phone] = value;
-        this.order[email] = value;
-    
+
+    setOrderFieldContactsForm(field: keyof IContactsForm, value: string) {
+        this.contacts[field] = value;
+
         if (this.validateContactsForm()) {
-            this.events.emit('order:ready', { phone: this.order.phone, email: this.order.email });
+            this.events.emit('order:ready', this.contacts);
         }
     }
 
     validateOrderAddressForm() {
         const errors: typeof this.formErrors = {};
         if (!this.order.address) {
-            errors.address = 'Необходимо указать адрес';
-        }
+            errors.address = 'Необходимо указать адрес';}
+        if (!this.order.payment) {
+            errors.payment = 'Необходимо выбрать способ оплаты';}
         this.formErrors = errors;
-        this.events.emit('formErrors:change', this.formErrors);
+        this.events.emit('formErrorsAddress:change', this.formErrors);
         return Object.keys(errors).length === 0;
     }
 
     validateContactsForm() {
-        const errors: typeof this.formErrors = {};
-        if (!this.order.email) {
+        const errors: typeof this.formErrorsContact = {};
+        if (!this.contacts.email) {
             errors.email = 'Необходимо указать email';
         }
-        if (!this.order.phone) {
+        if (!this.contacts.phone) {
             errors.phone = 'Необходимо указать телефон';
         }
-        this.formErrors = errors;
-        this.events.emit('formErrors:change', this.formErrors);
+        this.formErrorsContact = errors;
+        this.events.emit('formErrorsContact:change', this.formErrorsContact);
         return Object.keys(errors).length === 0;
     }
 
-        // getSelectProduct(): IProduct[] {
-    //     return this.catalog
-    //         .filter(item => item.status === 'closed' && item.isMyBid)
-    // }
-}
 
-
-
-    // toggleOrderedLot(id: string, isIncluded: boolean) {
-    //     if (isIncluded) {
-    //         this.order.items = _.uniq([...this.order.items, id]);
-    //     } else {
-    //         this.order.items = _.without(this.order.items, id);
-    //     }
-    // }
-
-    // clearBasket() {
-    //     this.order.items.forEach(id => {
-    //         this.toggleOrderedLot(id, false);
-    //         // this.catalog.find(it => it.id === id).clearPrice();
-    //     });
-    // }
-
-
+    clearBasket() {
+        // this.order.items.forEach(id => {
+        //     const product = this.catalog.find(it => it.id === id);
+        //     if (product) {
+        //         product.clearProduct();
+        //     }
+        // });
     
+        this.order.items = []; // Очистить список продуктов в заказе
+    }
+}

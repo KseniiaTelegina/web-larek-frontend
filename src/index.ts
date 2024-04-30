@@ -11,12 +11,13 @@ import { ProductAPI } from './components/base/ProductAPI';
 import { AppState, CatalogChangeEvent } from './components/base/AppData';
 import { Card } from './components/base/Card';
 import { cloneTemplate } from '../src/utils/utils';
-import { IProduct, IOrderForm, ICard } from './types';
+import { IProduct, IOrderForm, IContactsForm } from './types';
 import { Basket, BasketModel } from './components/Basket';
 import { Order } from './components/Order';
 import { appCard } from './components/base/Card';
 import { Contacts } from './components/Contacts';
 import { Success } from './components/Success';
+
 
 // import { a} from './components/base/Card';
 // import { createElement } from '../src/utils/utils';
@@ -43,6 +44,7 @@ const order = new Order(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
 const appData = new AppState({}, events);
+
 
 api.getCardList()
 	.then(appData.setCatalog.bind(appData))
@@ -85,14 +87,38 @@ events.on('basket:open', () => {
 	modal.render({ content: basket.render() });
 });
 
-// Открыть и отправить форму заказа с адресом и оплатой
-//открыть
+
+
+// Отправлена форма заказа
+events.on('success:open', () => {
+    api.orderProduct(appData.order)
+        .then((result) => {
+            const success = new Success(cloneTemplate(successTemplate), {
+                onClick: () => {
+                    modal.close();
+                    appData.clearBasket();
+                    // events.emit('auction:changed');
+                }
+            });
+
+            modal.render({
+                content: success.render({})
+            });
+        })
+        .catch(err => {
+            console.error(err);
+        });
+});
+
+// Открыть форму заказа с адресом и оплатой
+
 events.on('order:open', () => {
 	modal.render(
 		// ({ content: order.render() });
 		{
 			content: order.render({
 				address: '',
+				payment: '',
 				valid: false,
 				errors: [],
 			}),
@@ -100,41 +126,14 @@ events.on('order:open', () => {
 	);
 });
 
-//отправить
-// events.on('contacts:open', () => {
-//     api.orderProduct(appData.order)
-//         .then((result) => {
-//             const contactsForm = new Contacts(cloneTemplate(contactsTemplate), {
-//                 onClick: () => {
-//                     modal.close();
-//                     // appData.clearBasket();
-//                     // events.emit('auction:changed');
-//                 }
-//             });
-
-//             modal.render({
-//                 content: contactsForm.render({
-// 					phone: '',
-// 					email: '',
-// 					payment: '',
-// 					valid: false,
-// 					errors: [],
-// 				})
-//             });
-//         })
-//         .catch(err => {
-//             console.error(err);
-//         });
-// });
-
-// Открыть и отправить форму заказа с телефоном и почтой
+// Открыть  форму заказа с телефоном и почтой
 // условно рабочий вариант
 events.on('contacts:open', () => {
 	modal.render({
 		content: contacts.render({
 			phone: '',
 			email: '',
-			payment: '',
+			// payment: '',
 			valid: false,
 			errors: [],
 		}),
@@ -243,41 +242,33 @@ events.on('modal:close', () => {
 });
 
 // Изменилось состояние валидации формы
-events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
-	const { address } = errors;
-	order.valid = !address;
-	order.errors = Object.values({ address })
-		.filter((i) => !!i)
-		.join('; ');
+events.on('formErrorsAddress:change', (errors: Partial<IOrderForm>) => {
+	const { address, payment} = errors;
+	order.valid = !address && !payment;
+	order.errors = Object.values({ address, payment }).filter((i) => !!i).join('; ');
 });
 
-events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
-	const { phone, email } = errors;
-	contacts.valid = !phone && !email;
-	contacts.errors = Object.values({ phone, email })
-		.filter((i) => !!i)
-		.join('; ');
-	
+events.on('formErrorsContact:change', (errors: Partial<IContactsForm>) => {
+    const { email, phone } = errors;
+    contacts.valid = !email && !phone;
+    contacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
 });
 
 // Изменилось одно из полей
-events.on(
-	/^order\..*:change/,
-	(data: { address: keyof IOrderForm, value: string }) => {
-		appData.setOrderFieldAddressForm(data.address, data.value);
-	}
-);
+
+events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
+    appData.setOrderFieldAddressForm(data.field, data.value);
+});
+
+events.on(/^contacts\..*:change/, (data: { field: keyof IContactsForm, value: string }) => {
+    appData.setOrderFieldContactsForm(data.field, data.value);
+});
 
 
+// выбор оплаты 
 
-events.on(
-	/^order\..*:change/,
-	(data: { phone: keyof IOrderForm, email: keyof IOrderForm, value: string}) => {
-		appData.setOrderFieldContactsForm(data.phone, data.email, data.value);
-	}
-);
+events.on('payment:change', () => {
 
-
-
+})
 
 

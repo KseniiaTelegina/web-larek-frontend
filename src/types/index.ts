@@ -59,26 +59,34 @@ export interface IBasketHeaderButton {
 export interface IOrderForm {
     address: string;
     // items: string[];
-    email: string;
-    phone: string;
+    // email: string;
+    // phone: string;
     payment: string;
-    button: string;
+    // button: string;
    
     // paymentMethod: PaymentMethod;
 }
 
-// export interface IContactsForm {
+export interface IContactsForm  {
   
-//     // items: string[];
-//     email: string;
-//     phone: string;
-// }
+    // items: string[];
+    email: string;
+    phone: string;
+}
 
 // export interface IUserForm {
 //     email: string;
 //     phone: string;
     
 // }
+
+export interface IOrderContact extends IContactsForm  {
+  
+    items: string[];
+    // email: string;
+    // phone: string;
+}
+
 
 export interface IOrder extends IOrderForm {
     items: string[]
@@ -213,4 +221,5 @@ export interface IView {
     render(data?: object): HTMLElement;
 }
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
+export type FormErrorsContact = Partial<Record<keyof IOrderContact, string>>;
 

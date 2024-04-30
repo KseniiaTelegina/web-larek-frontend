@@ -122,7 +122,6 @@ export class Card<T> extends Component<IProduct> {
 
         if (value === null) {
             this.setDisabled(this._buttonInBasket, true);
-            // this._buttonInBasket.textContent = 'Не продается';
         } else {
             this.setDisabled(this._buttonInBasket, false);
         }

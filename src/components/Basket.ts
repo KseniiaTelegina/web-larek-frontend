@@ -46,13 +46,14 @@ export class Basket extends Component<IBasketView> {
         this.items = [];
         
     } 
+    
     set items(items: HTMLElement[]) {
         this._list.replaceChildren(...items);
         
     }
 
 
-    set selected(items: string[]) {
+    set button(items: HTMLElement[]) { //сделать кнопку
         if (items.length) {
             this.setDisabled(this._button, false);
         } else {
