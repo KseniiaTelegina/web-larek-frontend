@@ -40,7 +40,6 @@ export class Order extends Form<IOrderForm> {
         });
     }
 
-
         set selected (name: string) {
             this._payment.forEach(button => {
                 this.toggleClass(button, 'button_alt-active', button.name === name);
@@ -51,8 +50,8 @@ export class Order extends Form<IOrderForm> {
         (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
     }
 
-    set payment(value: string) {
-        (this.container.elements.namedItem('card') as HTMLInputElement).value = value;
-        (this.container.elements.namedItem('cash') as HTMLInputElement).value = value;
-    }
+    // set payment(value: string) {
+    //     (this.container.elements.namedItem('card') as HTMLButtonElement).value = value;
+    //     (this.container.elements.namedItem('cash') as HTMLButtonElement).value = value;
+    // }
 }

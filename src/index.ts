@@ -40,7 +40,9 @@ const api = new ProductAPI(CDN_URL, API_URL);
 const page = new Page(document.body, events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
-const order = new Order(cloneTemplate(orderTemplate), events);
+const order = new Order(cloneTemplate(orderTemplate), events, {
+	onClick: (buttonName) => events.emit('order.payment:change', {field: 'payment', value: buttonName })
+});
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
 const appData = new AppState({}, events);
