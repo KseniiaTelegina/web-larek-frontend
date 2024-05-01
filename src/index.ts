@@ -184,7 +184,7 @@ events.on('removeFromBasketInBasket:change', (item: IProduct) => {
 
 
 
-// // Продукт открыт
+// Продукт открыт
 events.on('preview:changed', (item: IProduct) => {
 	const showItem = (item: IProduct) => {
         const basketItems = appData.basketModel.items;
@@ -254,11 +254,5 @@ events.on(/^contacts\..*:change/, (data: { field: keyof IContactsForm, value: st
     appData.setOrderFieldContactsForm(data.field, data.value);
 });
 
-
-// выбор оплаты 
-
-// events.on('payment:change', () => {
-
-// })
 
 
