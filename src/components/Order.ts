@@ -15,7 +15,6 @@ export class Order extends Form<IOrderForm> {
     protected _button: HTMLElement;
     protected _payment: HTMLButtonElement[];
 
-    // constructor(protected container: HTMLFormElement, protected events: IEvents) {
                 constructor(protected container: HTMLFormElement, events: IEvents, actions?: IButtonPayment) {
         super(container, events);
 
@@ -49,9 +48,4 @@ export class Order extends Form<IOrderForm> {
     set address(value: string) {
         (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
     }
-
-    // set payment(value: string) {
-    //     (this.container.elements.namedItem('card') as HTMLButtonElement).value = value;
-    //     (this.container.elements.namedItem('cash') as HTMLButtonElement).value = value;
-    // }
 }

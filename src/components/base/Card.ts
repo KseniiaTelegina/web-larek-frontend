@@ -4,21 +4,10 @@ import { IEvents } from "./events";
 import { IProduct} from "../../types";
 import { EventEmitter } from "./events";
 import { formatNumber } from "../../utils/utils";
+import { ICardActions } from "../../types";
 
 
-export const appCard = {
-    productArray: [] as IProduct[],
-    cart: [] as IProduct[],
 
-    setCardItemBasket(product: IProduct) {
-        this.cart.push(product);
-        // console.log('Товар добавлен в корзину:', product);
-    },
-}
-
-interface ICardActions {
-    onClick: (event: MouseEvent) => void;
-}
 
 export class Card<T> extends Component<IProduct> {
     protected _title: HTMLElement;
@@ -30,17 +19,12 @@ export class Card<T> extends Component<IProduct> {
     protected _index: HTMLElement;
     protected _buttonDelete?: HTMLElement;
     protected _buttonInBasket?: HTMLButtonElement;
-    
-    // button: string;
 
 
      constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean, actions?: ICardActions) {
-        // constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, actions?: ICardActions) {
-        // constructor(protected container: HTMLElement,  actions?: ICardActions) {
         super(container);
 
         this._title = container.querySelector('.card__title');
-        // this._title = ensureElement<HTMLElement>('.card__title', container)
         this._category = container.querySelector('.card__category'); 
         this._image = container.querySelector('.card__image');
         this._price = container.querySelector('.card__price');

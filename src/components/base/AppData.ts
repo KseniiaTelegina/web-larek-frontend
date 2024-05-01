@@ -50,15 +50,16 @@ export class AppState extends Model<IAppState> {
     selectedItem: IProduct;
     price: IProduct;
 
-    // clearBasketOrder(items: IProduct[]) {  // Очистить список продуктов в заказе
-    //     return this.basketModel.clearBasket(items);
+
+    // clearBasketOrder() {  // Очистить список продуктов в заказе
+    //     return this.basketModel.clearBasket();
 
     // }
 
-    clearBasket() {  // Очистить список продуктов в заказе
-        this.basketModel.items = []; 
-        this.emitChanges('basket:cleared');
-    }
+    // clearBasket() {  // Очистить список продуктов в заказе
+    //     this.basketModel.items = []; 
+    //     this.emitChanges('basket:cleared');
+    // }
 
     setCatalog(items: IProduct[]) {
         this.catalog = items;
@@ -137,7 +138,5 @@ export class AppState extends Model<IAppState> {
         this.events.emit('formErrorsContact:change', this.formErrorsContact);
         return Object.keys(errors).length === 0;
     }
-
-
 
 }

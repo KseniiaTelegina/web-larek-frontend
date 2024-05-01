@@ -14,17 +14,12 @@ import { cloneTemplate } from '../src/utils/utils';
 import { IProduct, IOrderForm, IContactsForm } from './types';
 import { Basket, BasketModel } from './components/Basket';
 import { Order } from './components/Order';
-import { appCard } from './components/base/Card';
+
 import { Contacts } from './components/Contacts';
 import { Success } from './components/Success';
 
 
-// import { a} from './components/base/Card';
-// import { createElement } from '../src/utils/utils';
 
-// export const appCard: AppCard = {
-//     cardInBasket: []
-// };
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
@@ -53,12 +48,6 @@ api.getCardList()
 	.catch((err) => {
 		console.error(err);
 	});
-
-// Отправлена форма заказа
-
-// events.on('success:open', () => {
-//     modal.render({ content: success.render() });
-//   });
 
 
 //отображение списка продуктов
@@ -100,39 +89,34 @@ events.on('success:open', () => {
             modal.render({
                 content: success.render({})
             });
-            appData.clearBasket();
-			// appData.basketModel.clearBasket()
+			appData.basketModel.clearBasket()
+        	events.emit('basket:change');
         })
         .catch(err => {
             console.error(err);
         });
 });
 
-
-events.on('success:close', () => {
-	modal.close();
-})
-
-
 // events.on('success:open', () => {
 //     api.orderProduct(appData.order, appData.contacts, appData.basketModel)
-//         .then((result) => {
-//             const success = new Success(cloneTemplate(successTemplate), {
-//                 onClick: () => {
-//                     modal.close();
-//                     appData.clearBasket();
-//                     // events.emit('basket:cleared');
-//                 }
-//             });
-
+//         .then(() => {
+//             const success = new Success(cloneTemplate(successTemplate), events);
 //             modal.render({
 //                 content: success.render({})
 //             });
+//             appData.clearBasket();
+// 			// appData.basketModel.clearBasket()
 //         })
 //         .catch(err => {
 //             console.error(err);
 //         });
 // });
+
+
+events.on('success:close', () => {
+	modal.close();
+})
+
 
 // Открыть форму заказа с адресом и оплатой
 
@@ -168,7 +152,6 @@ events.on('contacts:open', () => {
 
 events.on('basket:change', () => {
 	page.basketCounter = appData.basketModel.items.length
-
     basket.total = appData.getTotalPrice();
 	basket.items = Array.from(appData.basketModel.items).map((basketItem, index) => {
 		const item = Array.from(appData.basketModel.items).find(
@@ -206,8 +189,7 @@ events.on('removeFromBasket:change', (item: IProduct) => {
 		events,
 		item,
 		appData.cardInBasket(item)
-	);
-	
+	);	
 	modal.render({ content: cardBasket.render(item) });
 });
 
@@ -291,8 +273,8 @@ events.on(/^contacts\..*:change/, (data: { field: keyof IContactsForm, value: st
 
 // выбор оплаты 
 
-events.on('payment:change', () => {
+// events.on('payment:change', () => {
 
-})
+// })
 
 

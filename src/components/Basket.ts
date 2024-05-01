@@ -6,9 +6,6 @@ import { IEvents } from "./base/events";
 import { AppState } from "./base/AppData";
 import { Card } from "./base/Card";
 
-// import { IBasketHeaderButton, ICardActions, IBasketModel } from "../types";
-
-
 
 interface IBasketView {
     items: HTMLElement[];
@@ -16,7 +13,6 @@ interface IBasketView {
     selected: string[];
     title: string;
     price: number;
-    // index: number;
 }
 
 export class Basket extends Component<IBasketView> {
@@ -24,6 +20,7 @@ export class Basket extends Component<IBasketView> {
     protected _price: HTMLElement;
     protected _button: HTMLElement;
     protected _index: HTMLElement;
+    // protected _items: HTMLElement;
 
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
@@ -32,7 +29,8 @@ export class Basket extends Component<IBasketView> {
         this._list = this.container.querySelector('.basket__list');
         this._price = this.container.querySelector('.basket__price');
         this._button = this.container.querySelector('.basket__button');
-        this._index = this.container.querySelector('.basket__item-index')
+        this._index = this.container.querySelector('.basket__item-index');
+        // this._items = this.container.querySelector('.basket__item');
 
     
 
@@ -44,7 +42,7 @@ export class Basket extends Component<IBasketView> {
 
 
         this.items = [];
-        
+
     } 
     
     set items(items: HTMLElement[]) {
@@ -53,7 +51,7 @@ export class Basket extends Component<IBasketView> {
             this.setDisabled(this._button, false);
         } else {
             this.setDisabled(this._button, true);
-        }      
+        }
     }
 
 
@@ -77,22 +75,25 @@ export class BasketModel implements IBasketModel {
     add(item: IProduct) {
         if (!this.items.some(it => it.id === item.id)) {
             this.items.push(item)
-            }  
+            } 
+            console.log('я в корзине', this.items) 
     }
 
     remove(item: IProduct) {
-      this.items = this.items.filter(it => it.id !== item.id)       
+      this.items = this.items.filter(it => it.id !== item.id)      
     }
 
-    getTotal(){
+    getTotal() {
         return this.items.reduce((total, product) => {
             return total + (product.price || 0);  
         }, 0); 
     }
 
-    // clearBasket(items: IProduct[]){
-    //     return this.items = []; 
-    // }
+    clearBasket() {
+        this.items = [];
+        // events.emit('basket:change', this.items);
+        console.log('корзина пуста', this.items)
+    }
 }
 
 

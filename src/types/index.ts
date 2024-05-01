@@ -1,3 +1,4 @@
+
 export interface IProduct {
     selected: boolean;
     id: string;
@@ -17,8 +18,7 @@ export interface IBasketModel {
     getTotal(): number;
     add(id: IProduct): void;
     remove(id: IProduct): void;
-    // clearBasket(items: IProduct[]): void;
-
+    clearBasket(): void;
 }
 
 

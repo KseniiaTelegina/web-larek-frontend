@@ -5,21 +5,7 @@ import {EventEmitter, IEvents} from "./base/events";
 import { ensureElement, ensureAllElements } from "../utils/utils";
 import { Component } from "./base/Component";
 
-// interface ICardActions {
-//     onClick: (event: MouseEvent) => void;
-// }
 
-// export type TabState = {
-//     selected: string
-// };
-// export type TabActions = {
-//     onClick: (tab: string) => void
-// }
-// 
-
-// interface IContactActions {
-//     onClick: () => void;
-// }
 
 export class Contacts extends Form<IContactsForm> {
 
@@ -37,16 +23,10 @@ export class Contacts extends Form<IContactsForm> {
         if (this._button) {
             this._button.addEventListener('click', () => {
                 events.emit('success:open');
+
                 console.log('допустим нажала')
             });
         }
-
-        // if (actions?.onClick) {
-        //     this._button.addEventListener('click', event => {
-        //         actions.onClick(event);
-        //         console.log('Clicked on card');
-        //     });
-        // }
 
     }
     

@@ -7,9 +7,6 @@ interface ISuccess {
     totalPrice: number;
 }
 
-interface ISuccessActions {
-    onClick: () => void;
-}
 
 export class Success extends Component<ISuccess> {
     protected _close: HTMLElement;
@@ -23,18 +20,12 @@ export class Success extends Component<ISuccess> {
         this._close = ensureElement<HTMLElement>('.order-success__close', this.container);
         this._totalPrice = container.querySelector('.order-success__description');
 
-        // if (actions?.onClick) {
-        //     this._close.addEventListener('click', actions.onClick);
-        // }
-
-
         if (this._close) {
             this._close.addEventListener('click', () => {
                 events.emit('success:close');
                 console.log('допустим закрыла окно')
             });
         }
-
     }
 
     set totalPrice(value: number) {
