@@ -92,25 +92,47 @@ events.on('basket:open', () => {
 
 
 // Отправлена форма заказа
+
 events.on('success:open', () => {
     api.orderProduct(appData.order, appData.contacts, appData.basketModel)
-        .then((result) => {
-            const success = new Success(cloneTemplate(successTemplate), {
-                onClick: () => {
-                    modal.close();
-                    appData.clearBasket();
-                    // events.emit('auction:changed');
-                }
-            });
-
+        .then(() => {
+            const success = new Success(cloneTemplate(successTemplate), events);
             modal.render({
                 content: success.render({})
             });
+            appData.clearBasket();
+			// appData.basketModel.clearBasket()
         })
         .catch(err => {
             console.error(err);
         });
 });
+
+
+events.on('success:close', () => {
+	modal.close();
+})
+
+
+// events.on('success:open', () => {
+//     api.orderProduct(appData.order, appData.contacts, appData.basketModel)
+//         .then((result) => {
+//             const success = new Success(cloneTemplate(successTemplate), {
+//                 onClick: () => {
+//                     modal.close();
+//                     appData.clearBasket();
+//                     // events.emit('basket:cleared');
+//                 }
+//             });
+
+//             modal.render({
+//                 content: success.render({})
+//             });
+//         })
+//         .catch(err => {
+//             console.error(err);
+//         });
+// });
 
 // Открыть форму заказа с адресом и оплатой
 

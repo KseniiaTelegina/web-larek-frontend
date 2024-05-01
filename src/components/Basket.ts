@@ -58,7 +58,7 @@ export class Basket extends Component<IBasketView> {
 
 
     set total(value: number | null) {
-        let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
+        const displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
         this.setText(this._price, displayText);
     }
     
@@ -89,6 +89,10 @@ export class BasketModel implements IBasketModel {
             return total + (product.price || 0);  
         }, 0); 
     }
+
+    // clearBasket(items: IProduct[]){
+    //     return this.items = []; 
+    // }
 }
 
 

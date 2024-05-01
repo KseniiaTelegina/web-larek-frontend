@@ -29,7 +29,7 @@ export type CatalogChangeEvent = {
 
 export class AppState extends Model<IAppState> {
     
-    basket: string[] = [];
+    // basket: string[] = [];
     catalog: IProduct[];
     order: IOrderForm = {
         address: '',
@@ -49,6 +49,16 @@ export class AppState extends Model<IAppState> {
     basketModel: IBasketModel = new BasketModel();
     selectedItem: IProduct;
     price: IProduct;
+
+    // clearBasketOrder(items: IProduct[]) {  // Очистить список продуктов в заказе
+    //     return this.basketModel.clearBasket(items);
+
+    // }
+
+    clearBasket() {  // Очистить список продуктов в заказе
+        this.basketModel.items = []; 
+        this.emitChanges('basket:cleared');
+    }
 
     setCatalog(items: IProduct[]) {
         this.catalog = items;
@@ -129,14 +139,5 @@ export class AppState extends Model<IAppState> {
     }
 
 
-    clearBasket() {
-        // this.order.items.forEach(id => {
-        //     const product = this.catalog.find(it => it.id === id);
-        //     if (product) {
-        //         product.clearProduct();
-        //     }
-        // });
-    
-        this.basketModel.items = []; // Очистить список продуктов в заказе
-    }
+
 }
