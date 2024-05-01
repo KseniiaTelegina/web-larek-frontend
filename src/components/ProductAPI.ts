@@ -1,6 +1,6 @@
-import { Api, ApiListResponse } from "./api"
-import { ICard, OpenCard, IOrderResult, IOrderForm, IContactsForm } from "../../types/index";
-import { BasketModel } from "../Basket";
+import { Api, ApiListResponse } from "./base/api"
+import { ICard, OpenCard, IOrderResult, IOrderForm, IContactsForm } from "../types/index";
+import { BasketModel } from "./Basket";
 
 export interface IProductAPI {
     getCardList: () => Promise<ICard[]>;

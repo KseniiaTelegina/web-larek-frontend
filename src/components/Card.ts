@@ -1,13 +1,7 @@
-import { Component } from "./Component";
-import { bem, ensureElement } from "../../utils/utils";
-import { IEvents } from "./events";
-import { IProduct} from "../../types";
-import { EventEmitter } from "./events";
-import { formatNumber } from "../../utils/utils";
-import { ICardActions } from "../../types";
-
-
-
+import { Component } from "./base/Component";
+import { IProduct} from "../types";
+import { EventEmitter } from "./base/events";
+import { ICardActions } from "../types";
 
 export class Card<T> extends Component<IProduct> {
     protected _title: HTMLElement;
@@ -19,7 +13,6 @@ export class Card<T> extends Component<IProduct> {
     protected _index: HTMLElement;
     protected _buttonDelete?: HTMLElement;
     protected _buttonInBasket?: HTMLButtonElement;
-
 
      constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean, actions?: ICardActions) {
         super(container);
@@ -33,9 +26,7 @@ export class Card<T> extends Component<IProduct> {
         this._buttonDelete = container.querySelector('.basket__item-delete');
         this._buttonInBasket = this.container.querySelector('.button')
         this._description = container.querySelector('.card__text');
-
-
-        
+  
         if (actions?.onClick) {
             if(this._button) {
                 this._button.addEventListener('click', actions.onClick)
@@ -44,8 +35,6 @@ export class Card<T> extends Component<IProduct> {
             }
         }
         
-
-
         if (this._buttonInBasket != null) {
             if (isItemInBasket) {
                 this._buttonInBasket.textContent = 'Удалить из корзины';
@@ -64,13 +53,9 @@ export class Card<T> extends Component<IProduct> {
             this._buttonDelete.addEventListener('click', () => {
                 this.events.emit('removeFromBasketInBasket:change', item);
                 this._buttonDelete.textContent = null;
-                console.log('Продукт удален');
             });
         }
-
-
     }
-
 
     set index(value: string) {
         this.setText(this._index, value);
@@ -116,7 +101,6 @@ export class Card<T> extends Component<IProduct> {
         return textContent === "Бесценно" ? 0 : Number(textContent);
     }
     
-
     set description(value: string) {
         this.setText(this._description, value);
         }
@@ -144,64 +128,11 @@ export class Card<T> extends Component<IProduct> {
                 this._category?.classList.add('card__category_button');
                 break;
             default:
-
                 break;
             }
     }
-
 
     get category(): string {
         return this._category.textContent || '';
     }
 }
-
-// export class CardPreview extends Card<IProduct> {
-    // protected _description: HTMLElement;
-    // protected _button: HTMLButtonElement;
-
-
-    // constructor(container: HTMLElement, protected events: EventEmitter, item: IProduct, isItemInBasket: boolean) {
-       
-    //     super(container, events, item);
-        // this._description = container.querySelector('.card__text');
-        // this._button = container.querySelector('.card__button')
-
-        // if (isItemInBasket) {
-        //     this._button.textContent = 'Удалить из корзины';
-        //     this._button.addEventListener('click', () => {
-        //         this.events.emit('removeFromBasket:change', item);
-        //     });
-        // } else {
-        //     this._button.textContent = 'В корзину';
-        //     this._button.addEventListener('click', () => {
-        //         this.events.emit('addInBasket:change', item);
-        //     });           
-        // }
-
-    // }
-
-    // set description(value: string) {
-    //     this.setText(this._description, value);
-    //     }
-    
-    // get description(): string {
-    //     return this._description.textContent || '';
-    // }
-
-    // set price(value: number | null) {
-    //     let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
-    //     this.setText(this._price, displayText);
-
-    //     if (value === null) {
-    //         this.setDisabled(this._button, true);
-    //         this._button.textContent = 'Не продается';
-    //     } else {
-    //         this.setDisabled(this._button, false);
-    //     }
-    // }
-
-    // get price(): number {
-    //     const textContent = this._price.textContent.replace(' синапсов', '');
-    //     return textContent === "Бесценно" ? 0 : Number(textContent);
-    // }
-// }

@@ -1,11 +1,7 @@
 import { Component } from "./base/Component"; 
 import { IEvents } from "./base/events"; 
-import { ensureElement } from "../utils/utils"; 
-
-interface IFormState {
-    valid: boolean;
-    errors: string[];
-}
+import { ensureElement } from "../utils/utils";
+import { IFormState } from "../types";
 
 export class Form<T> extends Component<IFormState> {
     protected _submit: HTMLButtonElement;
@@ -31,7 +27,6 @@ export class Form<T> extends Component<IFormState> {
     }
 
     protected onInputChange(field: keyof T, value: string) {
-        console.log(`${this.container.name}.${String(field)}:change`)
         this.events.emit(`${this.container.name}.${String(field)}:change`, {
             field,
             value
@@ -51,6 +46,5 @@ export class Form<T> extends Component<IFormState> {
         super.render({valid, errors});
         Object.assign(this, inputs);
         return this.container;
-
     }
 }

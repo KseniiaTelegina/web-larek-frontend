@@ -1,34 +1,8 @@
-// import {dayjs, formatNumber} from "../utils/utils";
-
-import {Model} from "./Model"
-import {FormErrors, IProduct, IAppState, IOrderForm, IBasketModel, IContactsForm, FormErrorsContact } from "../../types/index";
-// import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm} from "../../types/index";
-import { BasketModel } from "../Basket";
-// import { appCard } from "../.."; 
-
-export type CatalogChangeEvent = {
-    catalog: IProduct[]
-};
-
-// export class LotItem extends Model<IProduct> {
-//     selected: boolean;
-//     id: string;
-//     title: string;
-//     image: string;
-//     category: string;
-//     description?: string;
-//     price: number | null;  
-
-//     protected myPrice: number = 0;
-
-// }
-
-
-
-
+import {Model} from "./base/Model"
+import {FormErrors, IProduct, IAppState, IOrderForm, IBasketModel, IContactsForm, FormErrorsContact } from "../types/index";
+import { BasketModel } from "./Basket";
 
 export class AppState extends Model<IAppState> {
-    
 
     catalog: IProduct[];
     order: IOrderForm = {

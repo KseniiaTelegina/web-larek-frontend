@@ -1,21 +1,17 @@
 import './scss/styles.scss';
 
-import { EventEmitter, IEvents } from './components/base/events';
-// import { CardList } from './components/base/CardList';
-import { Api } from './components/base/api';
+import { EventEmitter } from './components/base/events';
 import { CDN_URL, API_URL } from './utils/constants';
-import { Modal } from '../../web-larek-frontend/src/components/base/Modal';
+import { Modal } from './components/Modal';
 import { ensureElement } from '../src/utils/utils';
-import { Page } from './components/base/Page';
-import { ProductAPI } from './components/base/ProductAPI';
-import { AppState, CatalogChangeEvent } from './components/base/AppData';
-import { Card } from './components/base/Card';
+import { Page } from './components/Page';
+import { ProductAPI } from './components/ProductAPI';
+import { AppState } from './components/AppData';
+import { Card } from './components/Card';
 import { cloneTemplate } from '../src/utils/utils';
-import { IProduct, IOrderForm, IContactsForm } from './types';
-import { Basket, BasketModel } from './components/Basket';
-import { Order } from './components/Order';
-
-import { Contacts } from './components/Contacts';
+import { IProduct, CatalogChangeEvent,IOrderForm, IContactsForm } from './types';
+import { Basket } from './components/Basket';
+import { Order, Contacts } from './components/Order';
 import { Success } from './components/Success';
 
 

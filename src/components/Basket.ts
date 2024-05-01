@@ -1,27 +1,12 @@
 import { Component } from "./base/Component";
-import { ensureElement, createElement, formatNumber } from "../utils/utils";
 import { EventEmitter } from "./base/events";
-import { IProduct, IBasketModel} from "../types";
-import { IEvents } from "./base/events";
-import { AppState } from "./base/AppData";
-import { Card } from "./base/Card";
-
-
-interface IBasketView {
-    items: HTMLElement[];
-    total: number;
-    selected: string[];
-    title: string;
-    price: number;
-}
+import { IProduct, IBasketView, IBasketModel} from "../types";
 
 export class Basket extends Component<IBasketView> {
     protected _list: HTMLElement;
     protected _price: HTMLElement;
     protected _button: HTMLElement;
     protected _index: HTMLElement;
-
-
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
@@ -31,17 +16,13 @@ export class Basket extends Component<IBasketView> {
         this._button = this.container.querySelector('.basket__button');
         this._index = this.container.querySelector('.basket__item-index');
 
-    
-
         if (this._button) {
             this._button.addEventListener('click', () => {
                 events.emit('order:open');
             });
         }
 
-
         this.items = [];
-
     } 
     
     set items(items: HTMLElement[]) {
@@ -53,7 +34,6 @@ export class Basket extends Component<IBasketView> {
         }
     }
 
-
     set total(value: number | null) {
         const displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
         this.setText(this._price, displayText);
@@ -63,8 +43,6 @@ export class Basket extends Component<IBasketView> {
         const textContent = this._price.textContent.replace(" синапсов", "");
         return textContent === "Бесценно" ? 0 : Number(textContent);
     }
-
-
 }
 
 export class BasketModel implements IBasketModel {

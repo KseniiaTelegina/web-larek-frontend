@@ -1,13 +1,7 @@
 import { Component } from "./base/Component"; 
 import { ensureElement } from "../utils/utils";
 import { EventEmitter } from "./base/events";
-import { BasketModel } from "./Basket";
-import { appData } from "..";
-
-interface ISuccess {
-    total: number;
-}
-
+import { ISuccess } from "../types";
 
 export class Success extends Component<ISuccess> {
     protected _close: HTMLElement;
@@ -28,10 +22,8 @@ export class Success extends Component<ISuccess> {
     }
 
     set total(value: number) {
-        // const valuePrice = (value === basketModel.getTotalPrice) 
         const displayText = `Списано ${value} синапсов`;
         this.setText(this._total, displayText);
-        // appData.getTotalPrice(this._total, displayText)
     }
 }
 
