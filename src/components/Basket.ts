@@ -48,18 +48,14 @@ export class Basket extends Component<IBasketView> {
     } 
     
     set items(items: HTMLElement[]) {
-        this._list.replaceChildren(...items);
-        
-    }
-
-
-    set button(items: HTMLElement[]) { //сделать кнопку
-        if (items.length) {
+        this._list.replaceChildren(...items); 
+        if (items.length > 0) {
             this.setDisabled(this._button, false);
         } else {
             this.setDisabled(this._button, true);
-        }
+        }      
     }
+
 
     set total(value: number | null) {
         let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
@@ -86,6 +82,12 @@ export class BasketModel implements IBasketModel {
 
     remove(item: IProduct) {
       this.items = this.items.filter(it => it.id !== item.id)       
+    }
+
+    getTotal(){
+        return this.items.reduce((total, product) => {
+            return total + (product.price || 0);  
+        }, 0); 
     }
 }
 

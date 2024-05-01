@@ -1,15 +1,16 @@
 import { CDN_URL } from "../../utils/constants";
 import { Api, ApiListResponse } from "./api"
 // import { Product, EventEmitter} from "../../types/index";
-import { ICard, OpenCard, IOrderResult, IOrder } from "../../types/index";
+import { ICard, OpenCard, IOrderResult, IOrderForm, IContactsForm } from "../../types/index";
 import { Modal } from './Modal';
+import { BasketModel } from "../Basket";
 
 export interface IProductAPI {
     getCardList: () => Promise<ICard[]>;
     getCardItem: (id: string) => Promise<ICard>;
     getOpenCard: (id: string) => Promise<OpenCard>;
     // placeBid(id: string, bid: IBid): Promise<LotUpdate>;
-    orderProduct: (order: IOrder) => Promise<IOrderResult>;
+    orderProduct: (order: IOrderForm, contacts: IContactsForm, basketModel: BasketModel) => Promise<IOrderResult>;
 }
 
 export class ProductAPI extends Api implements IProductAPI {
@@ -72,8 +73,15 @@ export class ProductAPI extends Api implements IProductAPI {
     //     );
     // }
 
-    orderProduct(order: IOrder): Promise<IOrderResult> {
-        return this.post('/order', order).then(
+    orderProduct(order: IOrderForm, contacts: IContactsForm, basketModel: BasketModel): Promise<IOrderResult> {
+        return this.post('/order', {
+            payment: order.payment,
+            email: contacts.email,
+            phone: contacts.phone,
+            address: order.address,
+            total: basketModel.getTotal(),
+            items: basketModel.items.map(it => it.id)
+        }).then(
             (data: IOrderResult) => data
         );
     }

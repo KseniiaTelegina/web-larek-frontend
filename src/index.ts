@@ -93,7 +93,7 @@ events.on('basket:open', () => {
 
 // Отправлена форма заказа
 events.on('success:open', () => {
-    api.orderProduct(appData.order)
+    api.orderProduct(appData.order, appData.contacts, appData.basketModel)
         .then((result) => {
             const success = new Success(cloneTemplate(successTemplate), {
                 onClick: () => {

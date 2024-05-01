@@ -13,7 +13,8 @@ export interface IProduct {
 }
 
 export interface IBasketModel {
-    items: IProduct[]
+    items: IProduct[];
+    getTotal(): number;
     add(id: IProduct): void;
     remove(id: IProduct): void;
 }
@@ -35,7 +36,7 @@ export interface IAppState {
     catalog: IProduct[];
     basket: string[];
     preview: string | null;
-    order: IOrder | null;
+    order: IOrderForm | null;
 }
 
 export interface IBasketHeaderButton {
@@ -80,18 +81,18 @@ export interface IContactsForm  {
     
 // }
 
-export interface IOrderContact extends IContactsForm  {
+// export interface IOrderContact extends IContactsForm  {
   
-    items: string[];
-    // email: string;
-    // phone: string;
-}
+//     items: string[];
+//     // email: string;
+//     // phone: string;
+// }
 
 
-export interface IOrder extends IOrderForm {
-    items: string[]
-    // selected: boolean;
-}
+// export interface IOrder extends IOrderForm {
+//     items: string[]
+//     // selected: boolean;
+// }
 
 // export interface IContact extends IUserForm {
 //     items: string[]
@@ -220,6 +221,6 @@ export interface IViewConstructor {
 export interface IView {
     render(data?: object): HTMLElement;
 }
-export type FormErrors = Partial<Record<keyof IOrder, string>>;
-export type FormErrorsContact = Partial<Record<keyof IOrderContact, string>>;
+export type FormErrors = Partial<Record<keyof IOrderForm, string>>;
+export type FormErrorsContact = Partial<Record<keyof IContactsForm, string>>;
 

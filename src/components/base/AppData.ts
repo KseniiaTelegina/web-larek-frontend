@@ -1,7 +1,7 @@
 // import {dayjs, formatNumber} from "../utils/utils";
 
 import {Model} from "./Model"
-import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm, IContactsForm, FormErrorsContact } from "../../types/index";
+import {FormErrors, IProduct, IAppState, IOrderForm, IBasketModel, IContactsForm, FormErrorsContact } from "../../types/index";
 // import {FormErrors, IProduct, IAppState, IOrder, IBasketModel, IOrderForm} from "../../types/index";
 import { BasketModel } from "../Basket";
 // import { appCard } from "../.."; 
@@ -31,11 +31,11 @@ export class AppState extends Model<IAppState> {
     
     basket: string[] = [];
     catalog: IProduct[];
-    order: IOrder = {
+    order: IOrderForm = {
         address: '',
         // email: '',
         // phone: '',
-        items: [],
+        // items: [],
         payment: '',
         // button: ''
     };
@@ -66,15 +66,14 @@ export class AppState extends Model<IAppState> {
         this.emitChanges('items:changed', item);
     }
 
-    get catalogCards() {
-        return this.catalog;
-    }
+    // get catalogCards() {
+    //     return this.catalog;
+    // }
 
     getTotalPrice() {
         console.log(this.basketModel.items)
-        return this.basketModel.items.reduce((total, product) => {
-            return total + (product.price || 0);  
-        }, 0);  
+        return this.basketModel.getTotal();
+    
     }
 
     setButton(item: IProduct) {
@@ -138,6 +137,6 @@ export class AppState extends Model<IAppState> {
         //     }
         // });
     
-        this.order.items = []; // Очистить список продуктов в заказе
+        this.basketModel.items = []; // Очистить список продуктов в заказе
     }
 }
