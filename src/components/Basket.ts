@@ -52,8 +52,7 @@ export class BasketModel implements IBasketModel {
     add(item: IProduct) {
         if (!this.items.some(it => it.id === item.id)) {
             this.items.push(item)
-            } 
-            console.log('я в корзине', this.items) 
+            }  
     }
 
     remove(item: IProduct) {

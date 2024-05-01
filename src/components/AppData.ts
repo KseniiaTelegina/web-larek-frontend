@@ -37,7 +37,6 @@ export class AppState extends Model<IAppState> {
     }
 
     getTotalPrice() {
-        console.log(this.basketModel.items)
         return this.basketModel.getTotal();
     
     }
@@ -79,7 +78,6 @@ export class AppState extends Model<IAppState> {
     }
 
     validateContactsForm() {
-        console.log(this.contacts);
         const errors: typeof this.formErrorsContact = {};
         if (!this.contacts.email) {
             errors.email = 'Необходимо указать email';

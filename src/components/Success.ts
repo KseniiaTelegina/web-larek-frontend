@@ -16,7 +16,6 @@ export class Success extends Component<ISuccess> {
         if (this._close) {
             this._close.addEventListener('click', () => {
                 events.emit('success:close');
-                console.log('допустим закрыла окно')
             });
         }
     }

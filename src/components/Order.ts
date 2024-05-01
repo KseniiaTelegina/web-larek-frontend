@@ -55,8 +55,6 @@ export class Contacts extends Form<IContactsForm> {
         if (this._button) {
             this._button.addEventListener('click', () => {
                 events.emit('success:open');
-
-                console.log('допустим нажала')
             });
         }
     }
