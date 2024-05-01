@@ -40,9 +40,10 @@ export type OpenCard = IProduct;
 
 export interface IAppState {
     catalog: IProduct[];
-    basket: string[];
     preview: string | null;
     order: IOrderForm | null;
+    contacts: IContactsForm | null;
+
 }
 
 export interface IBasketView {

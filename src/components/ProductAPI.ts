@@ -1,5 +1,5 @@
 import { Api, ApiListResponse } from "./base/api"
-import { ICard, OpenCard, IOrderResult, IOrderForm, IContactsForm } from "../types/index";
+import { ICard, OpenCard, IOrderResult, IOrderForm, IContactsForm  } from "../types/index";
 import { BasketModel } from "./Basket";
 
 export interface IProductAPI {
