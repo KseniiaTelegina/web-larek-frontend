@@ -101,7 +101,7 @@ export class Card<T> extends Component<IProduct> {
     }
 
     set price(value: number | null) {
-        let displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
+        const displayText = (value === null) ? "Бесценно" : `${value} синапсов`;
         this.setText(this._price, displayText);
 
         if (value === null) {

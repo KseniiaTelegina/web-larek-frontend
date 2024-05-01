@@ -1,24 +1,23 @@
 import { Component } from "./base/Component"; 
 import { ensureElement } from "../utils/utils";
 import { EventEmitter } from "./base/events";
-import { Basket } from "./Basket"; 
+import { BasketModel } from "./Basket";
+import { appData } from "..";
 
 interface ISuccess {
-    totalPrice: number;
+    total: number;
 }
 
 
 export class Success extends Component<ISuccess> {
     protected _close: HTMLElement;
-    protected _totalPrice: HTMLElement;
+    protected _total: HTMLElement;
 
-    // constructor(container: HTMLElement, actions: ISuccessActions) {
-        constructor(container: HTMLElement, protected events: EventEmitter) {
-            // constructor(container: HTMLElement) {
+    constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
 
         this._close = ensureElement<HTMLElement>('.order-success__close', this.container);
-        this._totalPrice = container.querySelector('.order-success__description');
+        this._total = ensureElement<HTMLElement>('.order-success__description', this.container);
 
         if (this._close) {
             this._close.addEventListener('click', () => {
@@ -28,9 +27,11 @@ export class Success extends Component<ISuccess> {
         }
     }
 
-    set totalPrice(value: number) {
+    set total(value: number) {
+        // const valuePrice = (value === basketModel.getTotalPrice) 
         const displayText = `Списано ${value} синапсов`;
-        this.setText(this._totalPrice, displayText);
-    
+        this.setText(this._total, displayText);
+        // appData.getTotalPrice(this._total, displayText)
     }
 }
+

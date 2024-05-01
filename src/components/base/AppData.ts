@@ -29,15 +29,11 @@ export type CatalogChangeEvent = {
 
 export class AppState extends Model<IAppState> {
     
-    // basket: string[] = [];
+
     catalog: IProduct[];
     order: IOrderForm = {
         address: '',
-        // email: '',
-        // phone: '',
-        // items: [],
         payment: '',
-        // button: ''
     };
     contacts: IContactsForm = {
         email: '',
@@ -49,17 +45,6 @@ export class AppState extends Model<IAppState> {
     basketModel: IBasketModel = new BasketModel();
     selectedItem: IProduct;
     price: IProduct;
-
-
-    // clearBasketOrder() {  // Очистить список продуктов в заказе
-    //     return this.basketModel.clearBasket();
-
-    // }
-
-    // clearBasket() {  // Очистить список продуктов в заказе
-    //     this.basketModel.items = []; 
-    //     this.emitChanges('basket:cleared');
-    // }
 
     setCatalog(items: IProduct[]) {
         this.catalog = items;
@@ -77,10 +62,6 @@ export class AppState extends Model<IAppState> {
         this.emitChanges('items:changed', item);
     }
 
-    // get catalogCards() {
-    //     return this.catalog;
-    // }
-
     getTotalPrice() {
         console.log(this.basketModel.items)
         return this.basketModel.getTotal();
@@ -90,9 +71,7 @@ export class AppState extends Model<IAppState> {
     setButton(item: IProduct) {
         this.preview = item.id;
         this.emitChanges('preview:changed', item);
-    }
-
-    // проверка на наличие продукта в корзине  
+    } 
 
     cardInBasket(item: IProduct): boolean {
         return this.basketModel.items.some(it => it.id === item.id);
@@ -138,5 +117,4 @@ export class AppState extends Model<IAppState> {
         this.events.emit('formErrorsContact:change', this.formErrorsContact);
         return Object.keys(errors).length === 0;
     }
-
 }

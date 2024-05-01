@@ -20,7 +20,7 @@ export class Basket extends Component<IBasketView> {
     protected _price: HTMLElement;
     protected _button: HTMLElement;
     protected _index: HTMLElement;
-    // protected _items: HTMLElement;
+
 
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
@@ -30,7 +30,6 @@ export class Basket extends Component<IBasketView> {
         this._price = this.container.querySelector('.basket__price');
         this._button = this.container.querySelector('.basket__button');
         this._index = this.container.querySelector('.basket__item-index');
-        // this._items = this.container.querySelector('.basket__item');
 
     
 
@@ -91,8 +90,6 @@ export class BasketModel implements IBasketModel {
 
     clearBasket() {
         this.items = [];
-        // events.emit('basket:change', this.items);
-        console.log('корзина пуста', this.items)
     }
 }
 

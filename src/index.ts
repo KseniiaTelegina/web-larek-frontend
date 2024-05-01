@@ -40,7 +40,7 @@ const order = new Order(cloneTemplate(orderTemplate), events, {
 });
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
-const appData = new AppState({}, events);
+export const appData = new AppState({}, events);
 
 
 api.getCardList()
@@ -53,6 +53,7 @@ api.getCardList()
 //отображение списка продуктов
 
 events.on<CatalogChangeEvent>('items:changed', () => {
+	
 	page.catalog = appData.catalog.map((item) => {
 		const card = new Card(cloneTemplate(cardCatalogTemplate), events, item, false, {
 			onClick: () => events.emit('card:select', item),
@@ -83,9 +84,11 @@ events.on('basket:open', () => {
 // Отправлена форма заказа
 
 events.on('success:open', () => {
+
     api.orderProduct(appData.order, appData.contacts, appData.basketModel)
         .then(() => {
             const success = new Success(cloneTemplate(successTemplate), events);
+			success.total = appData.getTotalPrice();
             modal.render({
                 content: success.render({})
             });
@@ -97,22 +100,6 @@ events.on('success:open', () => {
         });
 });
 
-// events.on('success:open', () => {
-//     api.orderProduct(appData.order, appData.contacts, appData.basketModel)
-//         .then(() => {
-//             const success = new Success(cloneTemplate(successTemplate), events);
-//             modal.render({
-//                 content: success.render({})
-//             });
-//             appData.clearBasket();
-// 			// appData.basketModel.clearBasket()
-//         })
-//         .catch(err => {
-//             console.error(err);
-//         });
-// });
-
-
 events.on('success:close', () => {
 	modal.close();
 })
@@ -122,7 +109,6 @@ events.on('success:close', () => {
 
 events.on('order:open', () => {
 	modal.render(
-		// ({ content: order.render() });
 		{
 			content: order.render({
 				address: '',
@@ -135,13 +121,11 @@ events.on('order:open', () => {
 });
 
 // Открыть  форму заказа с телефоном и почтой
-// условно рабочий вариант
 events.on('contacts:open', () => {
 	modal.render({
 		content: contacts.render({
 			phone: '',
 			email: '',
-			// payment: '',
 			valid: false,
 			errors: [],
 		}),
